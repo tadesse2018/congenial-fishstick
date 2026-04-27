@@ -22,8 +22,24 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 .row{display:flex;gap:5px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}
 .fld{display:flex;flex-direction:column}label{font-size:10px;font-weight:700;color:#475569}
 input,select{padding:5px;border:1px solid #cbd5e1;border-radius:4px;font-size:13px;outline:0;color:#000}
-.bar{background:#e2e8f0;padding:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn{padding:6px 12px;border:0;border-radius:4px;color:#fff;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:4px}
+
+/* የተስተካከለው የሚንሸራተት ባር (Bar) */
+.bar {
+    background: #e2e8f0;
+    padding: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    overflow-x: auto; /* ወደ ጎን እንዲንሸራተት */
+    white-space: nowrap; /* በተኖቹ ወደ ታች እንዳይወርዱ */
+    -webkit-overflow-scrolling: touch; /* ለሞባይል ልዝብ ንክኪ */
+    border-bottom: 1px solid #cbd5e1;
+}
+/* የመንሸራተቻው መስመር ቀጭን እንዲሆን */
+.bar::-webkit-scrollbar { height: 5px; }
+.bar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+
+.btn{padding:6px 12px;border:0;border-radius:4px;color:#fff;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:4px; flex-shrink: 0; /* እንዳይኮማተሩ */}
 
 main{flex:1;overflow:auto;padding:8px; background:#fff}
 table{border-collapse:collapse;background:#fff; width: auto; min-width: 100%; margin:0 auto; font-size:11px}
@@ -112,9 +128,10 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
         <button class="btn" style="background:#7c3aed" onclick="showAllCards()">🗂️ PRINT ALL CARDS</button>
         <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
         <button class="btn" style="background:var(--p)" onclick="window.print()">📋 PRINT ROSTER</button>
-        <button class="btn" style="background:var(--d); margin-left:auto" onclick="clearAllData()">⚠️ CLEAR ALL</button>
-        <input type="text" id="searchQ" placeholder="🔍 ስም ፈልግ..." onkeyup="renderTable()" style="width:180px">
+        <button class="btn" style="background:var(--d)" onclick="clearAllData()">⚠️ CLEAR ALL</button>
+        <div style="flex-grow: 1;"></div> <input type="text" id="searchQ" placeholder="🔍 ስም ፈልግ..." onkeyup="renderTable()" style="width:180px; flex-shrink: 0;">
     </div>
+    
     <main id="tableContainer"><table id="mainTable"></table></main>
 </div>
 
@@ -127,6 +144,7 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
 </div>
 
 <script>
+// ቀሪው የጃቫስክሪፕት ኮድህ እንዳለ ይቀጥላል...
 const DB_KEY = '_DIA_DATA_FINAL_V5_STABLE';
 const STATE_KEY = '_DIA_LAST_STATE';
 let DATA = JSON.parse(localStorage.getItem(DB_KEY)) || [];
