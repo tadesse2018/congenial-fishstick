@@ -22,24 +22,10 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 .row{display:flex;gap:5px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}
 .fld{display:flex;flex-direction:column}label{font-size:10px;font-weight:700;color:#475569}
 input,select{padding:5px;border:1px solid #cbd5e1;border-radius:4px;font-size:13px;outline:0;color:#000}
+input.invalid { border: 2px solid var(--d); background-color: #fee2e2; }
 
-/* የተስተካከለው የሚንሸራተት ባር (Bar) */
-.bar {
-    background: #e2e8f0;
-    padding: 8px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    overflow-x: auto; /* ወደ ጎን እንዲንሸራተት */
-    white-space: nowrap; /* በተኖቹ ወደ ታች እንዳይወርዱ */
-    -webkit-overflow-scrolling: touch; /* ለሞባይል ልዝብ ንክኪ */
-    border-bottom: 1px solid #cbd5e1;
-}
-/* የመንሸራተቻው መስመር ቀጭን እንዲሆን */
-.bar::-webkit-scrollbar { height: 5px; }
-.bar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-
-.btn{padding:6px 12px;border:0;border-radius:4px;color:#fff;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:4px; flex-shrink: 0; /* እንዳይኮማተሩ */}
+.bar{background:#e2e8f0;padding:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{padding:6px 12px;border:0;border-radius:4px;color:#fff;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:4px}
 
 main{flex:1;overflow:auto;padding:8px; background:#fff}
 table{border-collapse:collapse;background:#fff; width: auto; min-width: 100%; margin:0 auto; font-size:11px}
@@ -49,21 +35,24 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
 .ann-row{background:#f0fdf4;font-weight:700;color:var(--s)}
 
 #modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;overflow-y:auto;padding:20px}
-.card-content{background:#fff; width:210mm; margin:0 auto 20px auto; padding:10px; border-radius:2px; box-shadow:0 0 15px rgba(0,0,0,0.5); color:#000; page-break-inside: avoid;}
+.card-content{background:#fff; width:190mm; margin:0 auto 20px auto; padding:10px; border-radius:2px; box-shadow:0 0 15px rgba(0,0,0,0.5); color:#000; page-break-inside: avoid;}
 .main-card-border{border:2px solid var(--card-blue);padding:10px;display:flex;flex-direction:column}
 .card-header-box { text-align:center; border-bottom: 2px solid var(--card-blue); padding-bottom: 5px; margin-bottom: 5px; }
 .card-title-main { font-size: 22px; font-weight: 900; color: var(--card-blue); margin:0; }
 .card-subtitle-badge { border: 1.5px solid var(--card-blue); display: inline-block; padding: 1px 15px; border-radius: 20px; font-weight: bold; font-size: 13px; margin: 3px 0; }
-.info-grid{display:grid;grid-template-columns: 1fr 1fr 1.2fr; border: 1.5px solid var(--card-blue); margin-bottom: 5px; font-size: 13px;}
-.info-grid div { padding: 4px; border: 0.5px solid #eee; border-right: 1.5px solid var(--card-blue); }
+.info-grid{display:grid;grid-template-columns: 1fr 1fr 1.2fr; border: 1.5px solid var(--card-blue); margin-bottom: 5px; font-size: 12px;}
+.info-grid div { padding: 3px; border: 0.5px solid #eee; border-right: 1.5px solid var(--card-blue); }
+
 .card-table { width: 100%; border-collapse: collapse; border: 2px solid var(--card-blue); }
-.card-table th { border: 1.5px solid var(--card-blue); padding: 3px; background: #fff; color: var(--card-blue); font-size: 10px; }
-.card-table td { border: 1px solid #ccc; padding: 3px; text-align: center; font-weight: bold; font-size: 11px; }
-.comment-section { border: 1.5px solid var(--card-blue); margin-top: 5px; padding: 5px; font-size: 12px; min-height: 40px; background: #f8fafc; }
-.decision-box { border: 1.5px solid var(--s); background: #f0fdf4; padding: 8px; margin-top: 5px; text-align: center; font-weight: bold; border-radius: 8px; font-size: 13px; color: var(--s); }
+.card-table th { border: 1.5px solid var(--card-blue); padding: 2px; background: #fff; color: var(--card-blue); font-size: 10px; }
+.card-table td { border: 1px solid #ccc; padding: 2px 4px; text-align: center; font-weight: bold; font-size: 11px; }
+.card-table td:first-child { text-align: left; width: 1%; white-space: nowrap; padding-right: 10px; }
+
+.comment-section { border: 1.5px solid var(--card-blue); margin-top: 5px; padding: 5px; font-size: 12px; min-height: 35px; background: #f8fafc; }
+.decision-box { border: 1.5px solid var(--s); background: #f0fdf4; padding: 6px; margin-top: 5px; text-align: center; font-weight: bold; border-radius: 8px; font-size: 12px; color: var(--s); }
 .fail-box { border: 1.5px solid var(--d); background: #fef2f2; color: var(--d); }
-.footer-sig { display: flex; justify-content: space-between; margin-top: 15px; padding: 10px; font-size: 11px; font-weight: bold; }
-.sig-line { border-top: 1.5px dotted #000; width: 120px; margin-bottom: 3px; }
+.footer-sig { display: flex; justify-content: space-between; margin-top: 12px; padding: 5px; font-size: 11px; font-weight: bold; }
+.sig-line { border-top: 1.5px dotted #000; width: 110px; margin-bottom: 2px; }
 
 @media print {
     .btn, .bar, .app-header, .top, .btn-modal-hide, #login, th:last-child, td:last-child, .collapse-trigger { display: none !important; }
@@ -72,7 +61,7 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
     table { width: 100% !important; border: 1px solid #000; font-size: 9px; table-layout: auto; }
     th, td { white-space: normal !important; padding: 4px 2px; }
     .card-content { page-break-after: always; box-shadow: none; border: none; margin: 0; width: 100%; padding: 0; }
-    @page { size: A4 landscape; margin: 5mm; }
+    @page { size: A4 portrait; margin: 5mm; }
 }
 </style>
 </head>
@@ -99,20 +88,20 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
         <div class="row">
             <input type="text" id="h_s" value="DILIGENT INTELLECTUALS ACADEMY" style="width:250px">
             <select id="h_m" onchange="handleModeChange()"><option value="semester">Semester</option><option value="quarter" selected>Quarter</option></select>
-            <input type="text" id="h_y" value="2018 E.C" style="width:80px">
+            <input type="text" id="h_y" value="Academic Year 2018 E.C" style="width:165px">
             <input type="text" id="h_b" value="Math, English, Amharic, Science, IT" style="width:230px" onchange="initApp()">
             <button class="btn" style="background:var(--s)" onclick="addSubject()">+ ጨምር</button>
             <button class="btn" style="background:var(--d)" onclick="location.reload()">LOCK 🔒</button>
         </div>
         <div class="row" style="border-top:1px solid #eee;padding-top:10px">
             <input type="hidden" id="e_id" value="-1">
-            <div class="fld"><label>ID (ተራ ቁጥር)</label><input type="number" id="e_n" style="width:65px" readonly></div>
-            <div class="fld"><label>ተማሪ ስም / Name</label><input type="text" id="e_m" style="width:160px"></div>
-            <div class="fld"><label>ጾታ / Sex</label><select id="e_x"><option>Male</option><option>Female</option></select></div>
-            <div class="fld"><label>ዕድሜ / Age</label><input type="number" id="e_a" style="width:45px"></div>
-            <div class="fld"><label>ወቅት / Term</label><select id="e_t"></select></div>
-            <div class="fld"><label>ፀባይ / Conduct</label><select id="e_c"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
-            <div class="fld"><label>ማሳሰቢያ / Note</label><input type="text" id="e_com" style="width:120px"></div>
+            <div class="fld"><label>ID</label><input type="number" id="e_n" style="width:65px" readonly></div>
+            <div class="fld"><label>Name</label><input type="text" id="e_m" style="width:160px"></div>
+            <div class="fld"><label>Sex</label><select id="e_x"><option>Male</option><option>Female</option></select></div>
+            <div class="fld"><label>Age</label><input type="number" id="e_a" style="width:45px"></div>
+            <div class="fld"><label>Term</label><select id="e_t"></select></div>
+            <div class="fld"><label>Conduct</label><select id="e_c"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+            <div class="fld"><label>Note</label><input type="text" id="e_com" style="width:120px"></div>
             <div id="subjectInputs" style="display:flex;gap:4px"></div>
             <button class="btn" style="background:var(--s)" id="saveBtn" onclick="saveData()">💾 SAVE</button>
         </div>
@@ -128,10 +117,9 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
         <button class="btn" style="background:#7c3aed" onclick="showAllCards()">🗂️ PRINT ALL CARDS</button>
         <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
         <button class="btn" style="background:var(--p)" onclick="window.print()">📋 PRINT ROSTER</button>
-        <button class="btn" style="background:var(--d)" onclick="clearAllData()">⚠️ CLEAR ALL</button>
-        <div style="flex-grow: 1;"></div> <input type="text" id="searchQ" placeholder="🔍 ስም ፈልግ..." onkeyup="renderTable()" style="width:180px; flex-shrink: 0;">
+        <button class="btn" style="background:var(--d); margin-left:auto" onclick="clearAllData()">⚠️ CLEAR ALL</button>
+        <input type="text" id="searchQ" placeholder="🔍 ስም ፈልግ..." onkeyup="renderTable()" style="width:180px">
     </div>
-    
     <main id="tableContainer"><table id="mainTable"></table></main>
 </div>
 
@@ -144,7 +132,6 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
 </div>
 
 <script>
-// ቀሪው የጃቫስክሪፕት ኮድህ እንዳለ ይቀጥላል...
 const DB_KEY = '_DIA_DATA_FINAL_V5_STABLE';
 const STATE_KEY = '_DIA_LAST_STATE';
 let DATA = JSON.parse(localStorage.getItem(DB_KEY)) || [];
@@ -267,13 +254,29 @@ function saveData() {
     const term = parseInt(document.getElementById('e_t').value);
     const idVal = document.getElementById('e_id').value;
     
-    if(!idNum || !nameVal || isNaN(ageVal)) { alert("⚠️ መረጃዎችን ይሙሉ።"); return; }
+    if(!idNum || !nameVal || isNaN(ageVal)) { alert("⚠️ ስም እና ዕድሜ ይሙሉ።"); return; }
 
     let marks = {}, total = 0;
+    let errors = [];
+
     document.querySelectorAll('.mark-input').forEach(inp => {
-        let v = parseFloat(inp.value) || 0;
-        marks[inp.dataset.subj] = v; total += v;
+        let v = parseFloat(inp.value);
+        let subName = inp.dataset.subj;
+        if (isNaN(v)) v = 0;
+        if (v < 0 || v > 100) {
+            errors.push(subName);
+            inp.classList.add('invalid');
+        } else {
+            inp.classList.remove('invalid');
+            marks[subName] = v; 
+            total += v;
+        }
     });
+
+    if (errors.length > 0) {
+        alert("⚠️ ስህተት፡ የ " + errors.join(", ") + " ውጤት ከ 0-100 መሆን አለበት!");
+        return;
+    }
 
     const entry = {
         id: idVal === "-1" ? Date.now() : parseFloat(idVal),
@@ -312,7 +315,11 @@ function editRec(id) {
     document.getElementById('e_t').value = r.term;
     document.getElementById('e_c').value = r.conduct;
     document.getElementById('e_com').value = r.comment;
-    SUBJECTS.forEach((s, i) => document.getElementById(`m_${i}`).value = r.marks[s] || 0);
+    SUBJECTS.forEach((s, i) => {
+        const inp = document.getElementById(`m_${i}`);
+        inp.value = r.marks[s] || 0;
+        inp.classList.remove('invalid');
+    });
 }
 
 function buildCardHTML(no, g, s, classData) {
@@ -330,10 +337,10 @@ function buildCardHTML(no, g, s, classData) {
         const s1 = (typeof q[0]==='number'&&typeof q[1]==='number')?((q[0]+q[1])/2).toFixed(1):"-";
         const s2 = (typeof q[2]==='number'&&typeof q[3]==='number')?((q[2]+q[3])/2).toFixed(1):"-";
         const ann = (recs.reduce((u,r)=>u+(r.marks[sub]||0),0)/recs.length).toFixed(1);
-        tableHtml += `<tr><td style="text-align:left">${sub}</td><td>${q[0]}</td><td>${q[1]}</td><td>${s1}</td><td>${q[2]}</td><td>${q[3]}</td><td>${s2}</td><td>${ann}</td></tr>`;
+        tableHtml += `<tr><td>${sub}</td><td>${q[0]}</td><td>${q[1]}</td><td>${s1}</td><td>${q[2]}</td><td>${q[3]}</td><td>${s2}</td><td>${ann}</td></tr>`;
     });
     ['TOTAL', 'AVERAGE', 'RANK', 'CONDUCT'].forEach(m => {
-        tableHtml += `<tr><td style="text-align:left; color:var(--card-blue); font-weight:900">${m}</td>`;
+        tableHtml += `<tr><td style="color:var(--card-blue); font-weight:900">${m}</td>`;
         [1, 2, 'S1', 3, 4, 'S2'].forEach(t => {
             let val = "-";
             const terms = (t === 'S1') ? [1,2] : (t === 'S2' ? [3,4] : [t]);
@@ -357,7 +364,7 @@ function buildCardHTML(no, g, s, classData) {
         let annVal = (m === 'TOTAL') ? (recs.reduce((s, r) => s + r.total, 0) / recs.length).toFixed(0) : (m === 'AVERAGE' ? finalAvg.toFixed(1) : (m === 'CONDUCT' ? recs[recs.length-1].conduct : annRank));
         tableHtml += `<td style="background:#f0fdf4">${annVal}</td></tr>`;
     });
-    return `<div class="card-content"><div class="main-card-border"><div class="card-header-box"><h1 class="card-title-main">${schoolName}</h1><div class="card-subtitle-badge">STUDENT PROGRESS REPORT CARD</div><div>${year}</div></div><div class="info-grid"><div>Name: <b>${recs[0].name}</b></div><div>Age: <b>${recs[0].age}</b></div><div>Grade: <b>${g}-${s}</b></div><div>ID: <b>${no}</b></div><div>Sex: <b>${recs[0].sex}</b></div><div>Year: <b>${year}</b></div></div>${tableHtml}</tbody></table><div class="comment-section"><b>Teacher's Comment:</b> ${finalAvg >= 50 ? 'በጣም ጥሩ ውጤት ነው፤ በርታ/ቺ።' : 'ደካማ ውጤት ነው፤ ጥረት ያስፈልጋል።'}</div><div class="decision-box ${!isPass?'fail-box':''}">ይህ/ቺ ተማሪ በ${year} አማካኝ ውጤት <b>${finalAvg.toFixed(1)}</b> በማስመዝገብ ከ <b>${g}</b> ወደ ቀጣዩ ክፍል <b>${isPass?'ተዘዋውሯል/ች':'አልተዘዋወረም/ችም'}</b>።</div><div class="footer-sig"><div><div class="sig-line"></div>Parent Signature</div><div><div class="sig-line"></div>Teacher Signature</div><div><div class="sig-line"></div>Principal Signature</div></div></div></div>`;
+    return `<div class="card-content"><div class="main-card-border"><div class="card-header-box"><h1 class="card-title-main">${schoolName}</h1><div class="card-subtitle-badge">STUDENT PROGRESS REPORT CARD</div><div>${year}</div></div><div class="info-grid"><div>Name: <b>${recs[0].name}</b></div><div>Age: <b>${recs[0].age}</b></div><div>Grade: <b>${g}-${s}</b></div><div>ID: <b>${no}</b></div><div>Sex: <b>${recs[0].sex}</b></div><div>Year: <b>${year}</b></div></div>${tableHtml}</tbody></table><div class="comment-section"><b>Teacher's Comment:</b> ${finalAvg >= 50 ? 'በጣም ጥሩ ውጤት ነው፤ በርታ/ቺ።' : 'ደካማ ውጤት ነው፤ ጥረት ያስፈልጋል።'}</div><div class="decision-box ${!isPass?'fail-box':''}">ይህ/ቺ ተማሪ አማካኝ ውጤት <b>${finalAvg.toFixed(1)}</b> በማስመዝገብ ከ <b>${g}</b> ወደ ቀጣዩ ክፍል <b>${isPass?'ተዘዋውሯል/ች':'አልተዘዋወረም/ችም'}</b>።</div><div class="footer-sig"><div><div class="sig-line"></div>Parent Signature</div><div><div class="sig-line"></div>Teacher Signature</div><div><div class="sig-line"></div>Principal Signature</div></div></div></div>`;
 }
 
 function showCard(no, g, s) { const classData = DATA.filter(d => d.grade === g && d.sec === s); document.getElementById('cardView').innerHTML = buildCardHTML(no, g, s, classData); document.getElementById('modal').style.display = 'block'; }
