@@ -22,9 +22,6 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 .row{display:flex;gap:5px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}
 .fld{display:flex;flex-direction:column}label{font-size:10px;font-weight:700;color:#475569}
 input,select{padding:5px;border:1px solid #cbd5e1;border-radius:4px;font-size:13px;outline:0;color:#000}
-/* ስህተት ሲኖር የሚያሳይ ስታይል */
-input.invalid { border: 2px solid var(--d); background-color: #fee2e2; }
-
 .bar{background:#e2e8f0;padding:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .btn{padding:6px 12px;border:0;border-radius:4px;color:#fff;font-weight:700;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:4px}
 
@@ -252,34 +249,13 @@ function saveData() {
     const term = parseInt(document.getElementById('e_t').value);
     const idVal = document.getElementById('e_id').value;
     
-    if(!idNum || !nameVal || isNaN(ageVal)) { alert("⚠️ እባክዎ የተማሪውን ስም እና ዕድሜ ይሙሉ።"); return; }
+    if(!idNum || !nameVal || isNaN(ageVal)) { alert("⚠️ መረጃዎችን ይሙሉ።"); return; }
 
     let marks = {}, total = 0;
-    let errors = [];
-
-    // Validation loop
     document.querySelectorAll('.mark-input').forEach(inp => {
-        let v = parseFloat(inp.value);
-        let subName = inp.dataset.subj;
-        
-        // ማንኛውም ሳጥን ባዶ ከሆነ እንደ 0 ይቆጠራል
-        if (isNaN(v)) v = 0;
-
-        // የውጤት ገደብ 0 - 100 
-        if (v < 0 || v > 100) {
-            errors.push(subName);
-            inp.classList.add('invalid'); // ስህተት ያለበትን ሳጥን በቀይ ያሳያል
-        } else {
-            inp.classList.remove('invalid');
-            marks[subName] = v; 
-            total += v;
-        }
+        let v = parseFloat(inp.value) || 0;
+        marks[inp.dataset.subj] = v; total += v;
     });
-
-    if (errors.length > 0) {
-        alert("⚠️ ስህተት፡ የ " + errors.join(", ") + " ውጤት ከ 0 በታች ወይም ከ 100 በላይ መሆን አይችልም!");
-        return; // ሴቭ እንዳያደርግ እዚህ ጋር ያቆማል
-    }
 
     const entry = {
         id: idVal === "-1" ? Date.now() : parseFloat(idVal),
@@ -318,11 +294,7 @@ function editRec(id) {
     document.getElementById('e_t').value = r.term;
     document.getElementById('e_c').value = r.conduct;
     document.getElementById('e_com').value = r.comment;
-    SUBJECTS.forEach((s, i) => {
-        const inp = document.getElementById(`m_${i}`);
-        inp.value = r.marks[s] || 0;
-        inp.classList.remove('invalid');
-    });
+    SUBJECTS.forEach((s, i) => document.getElementById(`m_${i}`).value = r.marks[s] || 0);
 }
 
 function buildCardHTML(no, g, s, classData) {
