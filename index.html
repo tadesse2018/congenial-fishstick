@@ -114,6 +114,7 @@ th{background:#1e293b;color:#fff; position: sticky; top: 0; z-index: 5;}
         <button class="btn" style="background:var(--p)" onclick="window.print()">📋 PRINT ROSTER</button>
         <button class="btn" style="background:var(--tg)" onclick="shareSystem()">✈️ SHARE/SEND</button>
         <button class="btn" style="background:var(--s)" onclick="addSubject()">➕ ADD SUBJECT</button>
+        <button class="btn" style="background:#8b5cf6" onclick="showRawData()">🚀 GET ALL DATA</button>
         <button class="btn" style="background:var(--d)" onclick="clearAllData()">⚠️ CLEAR ALL</button>
         <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
         <input type="text" id="searchQ" placeholder="🔍 ስም ፈልግ..." onkeyup="renderTable()" style="width:150px; flex-shrink:0">
@@ -154,7 +155,6 @@ function checkLogin() {
 }
 
 function initApp() {
-    // ከሚሞሪ መጫን
     const savedSubs = localStorage.getItem(SUB_KEY);
     if(savedSubs) document.getElementById('h_b').value = savedSubs;
 
@@ -196,7 +196,6 @@ function handleEnter(e, idx) {
     }
 }
 
-// የትምህርት አይነቱ እንዳይጠፋ እዚህ ጋር ሴቭ ይደረጋል
 function saveSubs() { 
     localStorage.setItem(SUB_KEY, document.getElementById('h_b').value); 
     SUBJECTS = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x);
@@ -323,7 +322,6 @@ function resetFields() {
     document.querySelectorAll('.mark-input').forEach(i => i.value = "");
 }
 
-// *** EDIT FIX: ዳታው እንዲመለስና የትምህርት አይነቱም እንዲጠበቅ ተስተካክሏል ***
 function editRec(id) {
     const r = DATA.find(d => d.id === id);
     if(!r) return;
@@ -338,7 +336,6 @@ function editRec(id) {
     document.getElementById('e_abs').value = r.absent || 0;
     document.getElementById('e_com').value = r.comment || "";
 
-    // ውጤቶችን መመለስ
     SUBJECTS.forEach((s, i) => { 
         if(document.getElementById(`m_${i}`)) {
             document.getElementById(`m_${i}`).value = (r.marks && r.marks[s]) ? r.marks[s] : 0; 
@@ -356,6 +353,7 @@ function delRec(id) {
         renderTable(); updateNextID(); 
     } 
 }
+
 function exportJSON() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DATA)], {type: 'application/json'})); a.download = `DIA_Backup.json`; a.click(); }
 function importJSON(e) { const r = new FileReader(); r.onload = (ex) => { DATA = JSON.parse(ex.target.result); localStorage.setItem(DB_KEY, JSON.stringify(DATA)); initApp(); }; r.readAsText(e.target.files[0]); }
 function addSubject() { let s = prompt("Subject Name:"); if(s) { let cur = document.getElementById('h_b').value; document.getElementById('h_b').value = cur + "," + s; saveSubs(); } }
@@ -369,7 +367,23 @@ function handlePrintCards() {
     document.getElementById('cardView').innerHTML = ids.map(id => buildCardHTML(id, vg, vs, classData)).join('');
     document.getElementById('modal').style.display = 'block';
 }
+
 function shareSystem() { window.print(); }
+
+function showRawData() {
+    const allData = JSON.stringify(DATA);
+    const overlay = document.createElement('div');
+    overlay.style = "position:fixed; inset:0; background:white; z-index:100000; padding:20px; overflow:auto; color:black;";
+    overlay.innerHTML = `
+        <h3>ይህ የሁሉም ተማሪዎች ዳታ ነው!</h3>
+        <p style="color:gray">ከታች ያለውን ጽሁፍ በሙሉ "Select All" አድርገህ ኮፒ በማድረግ ቴሌግራም ላይ ላከው።</p>
+        <textarea id="fullCopy" style="width:100%; height:300px; font-size:12px; border:2px solid #8b5cf6; padding:10px;">${allData}</textarea>
+        <br><br>
+        <button onclick="this.parentElement.remove()" style="padding:10px 20px; background:red; color:white; border:none; border-radius:5px; cursor:pointer;">ዘግተህ ተመለስ</button>
+    `;
+    document.body.appendChild(overlay);
+    document.getElementById('fullCopy').select();
+}
 
 function buildCardHTML(no, g, s, classData) {
     const recs = classData.filter(d => d.no == no).sort((a,b) => a.term - b.term);
