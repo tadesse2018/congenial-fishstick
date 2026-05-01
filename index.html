@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>DIA Grade Pro - Official Roster</title>
 
-<!-- PWA Settings (እንደ ሞባይል አፕ ስልክ ላይ እንዲጫን) -->
+<!-- PWA Settings -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22DIAGradePro%22,%22short_name%22:%22GradePro%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#1e40af%22,%22theme_color%22:%22#1e40af%22}">
@@ -23,8 +23,12 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
     body, html { background: white !important; overflow: visible !important; height: auto !important; width: 100% !important; display: block !important; }
     #app { display: block !important; }
     main { overflow: visible !important; display: block !important; padding: 0 !important; width: 100% !important; margin: 0 !important; }
+    
     body.printing-roster .roster-print-header { display: block !important; }
     body.printing-roster #mainTable { width: 100% !important; border: 1.5px solid #000 !important; display: table !important; }
+    
+    body.printing-roster tbody { page-break-inside: avoid !important; break-inside: avoid-page !important; }
+    
     body.printing-cards #tableContainer { display: none !important; }
     body.printing-cards #modal { display: block !important; position: relative !important; background: white !important; padding: 0 !important; width: 100% !important; }
     body.printing-cards .card-content { width: 100% !important; height: auto !important; min-height: 120mm; margin: 0 0 10mm 0 !important; padding: 5mm !important; border: 2px solid var(--card-blue) !important; page-break-inside: avoid; break-inside: avoid; }
@@ -72,7 +76,6 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 .signature-area { margin-top: 20px; display: flex; justify-content: space-between; width: 100%; padding: 0 5px; }
 .sig-line { width: 30%; border-top: 1.5px solid #000; text-align: center; padding-top: 3px; font-weight: 900; font-size: 10px; }
 
-/* Cloud Sync UI */
 .sync-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 10px; }
 .sync-on { background: #dcfce7; color: #166534; }
 .sync-off { background: #fee2e2; color: #991b1b; }
@@ -192,21 +195,14 @@ function initApp() {
     renderTable();
 }
 
-// ክላውድ ሲንክ ፈንክሽን
 async function syncWithCloud() {
     const btn = event.target;
     const status = document.getElementById('cloudStatus');
     btn.disabled = true;
     btn.innerText = "Syncing...";
-
     try {
-        // ዳታውን ወደ JSON መልክ ይቀይረዋል
         const payload = JSON.stringify(DATA);
-        
-        // እዚህ ጋር የራስህን API URL ማስገባት ትችላለህ
-        // ለጊዜው በLocalStorage እንደተቀመጠ ምልክት ያሳያል
         localStorage.setItem(DB_KEY, payload);
-        
         setTimeout(() => {
             btn.disabled = false;
             btn.innerText = "☁️ SYNC CLOUD";
@@ -292,11 +288,13 @@ function renderTable() {
     
     students.forEach(no => {
         const recs = classData.filter(d => d.no == no).sort((a,b)=>a.term - b.term);
-        const span = recs.length + (mode === 'quarter' ? (recs.some(r=>r.term==2)?1:0) + (recs.some(r=>r.term==4)?1:0) : 0) + 1;
         html += `<tbody>`;
         recs.forEach((r, i) => {
             const tAvgs = classData.filter(d => d.term == r.term).map(d => d.avg);
+            const span = recs.length + (mode === 'quarter' ? (recs.some(rx=>rx.term==2)?1:0) + (recs.some(rx=>rx.term==4)?1:0) : 0) + 1;
+            
             html += `<tr>${i===0?`<td rowspan="${span}">${no}</td><td rowspan="${span}" style="text-align:left">${r.name}</td><td rowspan="${span}">${r.sex}</td><td rowspan="${span}">${r.age}</td>`:''}<td>${mode==='quarter'?'Q':'Sem'} ${r.term}</td>${SUBJECTS.map(s=>`<td>${r.marks[s] || 0}</td>`).join('')}<td>${r.total.toFixed(0)}</td><td>${r.avg.toFixed(1)}</td><td>${getRank(r.avg, tAvgs)}</td><td>${r.conduct}</td><td>${r.absent}</td><td class="btn-modal-hide"><button onclick="editRec(${r.id})">✏️</button><button onclick="delRec(${r.id})">🗑️</button></td></tr>`;
+            
             if(mode==='quarter' && r.term == 2) html += renderSubRow(no, vg, vs, [1,2], "SEM 1 AVG", classData);
             if(mode==='quarter' && r.term == 4) html += renderSubRow(no, vg, vs, [3,4], "SEM 2 AVG", classData);
         });
@@ -311,13 +309,13 @@ function renderSubRow(no, g, s, terms, label, cData, isAnn=false) {
     if(recs.length === 0) return "";
     const avg = recs.reduce((sum, r) => sum + r.avg, 0) / recs.length;
     const totalSum = recs.reduce((sum, r) => sum + r.total, 0) / recs.length;
-    const absentSum = recs.reduce((sum, r) => sum + Number(r.absent), 0);
     const allIds = [...new Set(cData.map(d => d.no))];
     const groupAvgs = allIds.map(id => {
         const sr = cData.filter(d => d.no == id && terms.includes(Number(d.term)));
         return sr.length > 0 ? (sr.reduce((sum, r) => sum + r.avg, 0) / sr.length) : null;
     }).filter(v => v !== null);
-    return `<tr style="background:${isAnn?'#fefce8':'#f1f5f9'}; font-weight:bold"><td>${label}</td>${SUBJECTS.map(sub => `<td>${(recs.reduce((u,r)=>u+(r.marks[sub]||0),0)/recs.length).toFixed(1)}</td>`).join('')}<td>${totalSum.toFixed(0)}</td><td>${avg.toFixed(1)}</td><td>${getRank(avg, groupAvgs)}</td><td>-</td><td>${absentSum}</td><td class="btn-modal-hide">${isAnn?`<button onclick="showCard('${no}','${g}','${s}')">CARD</button>`:'-'}</td></tr>`;
+    
+    return `<tr style="background:${isAnn?'#fefce8':'#f1f5f9'}; font-weight:bold"><td>${label}</td>${SUBJECTS.map(sub => `<td>${(recs.reduce((u,r)=>u+(r.marks[sub]||0),0)/recs.length).toFixed(1)}</td>`).join('')}<td>${totalSum.toFixed(0)}</td><td>${avg.toFixed(1)}</td><td>${getRank(avg, groupAvgs)}</td><td>_ _</td><td>_ _</td><td class="btn-modal-hide">${isAnn?`<button onclick="showCard('${no}','${g}','${s}')">CARD</button>`:'-'}</td></tr>`;
 }
 
 function saveData() {
@@ -327,10 +325,8 @@ function saveData() {
     const mode = document.getElementById('h_m').value;
     let marks = {}, total = 0;
     document.querySelectorAll('.mark-input').forEach(i => { let v = parseFloat(i.value) || 0; marks[i.dataset.subj] = v; total += v; });
-    
     const avg = total / SUBJECTS.length;
     const isEdit = document.getElementById('e_id').value !== "-1";
-    
     const entry = {
         id: isEdit ? parseFloat(document.getElementById('e_id').value) : Date.now(),
         no: document.getElementById('e_n').value, name, sex: document.getElementById('e_x').value, age: document.getElementById('e_a').value,
@@ -339,11 +335,9 @@ function saveData() {
         comment: document.getElementById('e_com').value || getAutoComment(avg), 
         marks, total, avg: avg
     };
-    
     const idx = DATA.findIndex(d => d.id === entry.id);
     if(idx > -1) DATA[idx] = entry; else DATA.push(entry);
     localStorage.setItem(DB_KEY, JSON.stringify(DATA));
-    
     if(!isEdit) {
         if((mode==='quarter' && currentTerm < 4) || (mode==='semester' && currentTerm < 2)) {
             document.getElementById('e_t').value = currentTerm + 1;
@@ -356,10 +350,7 @@ function saveData() {
             updateNextID(); 
             document.getElementById('e_m').focus();
         }
-    } else {
-        resetFields();
-        updateNextID();
-    }
+    } else { resetFields(); updateNextID(); }
     renderTable();
 }
 
@@ -396,7 +387,6 @@ function buildCardHTML(no, g, s, classData) {
     const mode = document.getElementById('h_m').value;
 
     let tableHtml = `<table class="card-table"><thead><tr><th rowspan="2">SUBJECTS<br>ትምህርቶች</th>`;
-    
     if(mode === 'quarter') {
         tableHtml += `<th colspan="3">SEM 1 / 1ኛ ሴሚ</th><th colspan="3">SEM 2 / 2ኛ ሴሚ</th><th rowspan="2">ANN<br>ዓመታዊ</th></tr><tr><th>Q1</th><th>Q2</th><th>AVG</th><th>Q3</th><th>Q4</th><th>AVG</th></tr></thead><tbody>`;
     } else {
@@ -418,38 +408,44 @@ function buildCardHTML(no, g, s, classData) {
         }
     });
 
-    const metrics = [{k:'TOTAL', m:'TOTAL'}, {k:'AVG', m:'AVG'}, {k:'RANK', m:'RANK'}, {k:'COND.', m:'COND.'}, {k:'ABSENT', m:'ABSENT'}];
-    metrics.forEach(metric => {
-        tableHtml += `<tr><td class="highlight-cell" style="text-align:left;padding-left:5px">${metric.k}</td>`;
+    const cardMetrics = [
+        {k:'TOTAL', m:'TOTAL'}, {k:'AVG', m:'AVG'}, {k:'RANK', m:'RANK'}, 
+        {k:'COND.', m:'COND.'}, {k:'ABSENT', m:'ABSENT'}, {k:'COMMENT', m:'COMMENT'}
+    ];
+
+    cardMetrics.forEach(metric => {
+        tableHtml += `<tr><td class="highlight-cell" style="text-align:left;padding-left:5px; font-size:9px">${metric.k}</td>`;
         const cols = mode === 'quarter' ? [1, 2, 'S1', 3, 4, 'S2'] : [1, 2];
+        
         cols.forEach(t => {
             let val = "-"; 
             const terms = (t === 'S1') ? [1,2] : (t === 'S2' ? [3,4] : [t]);
             const sRecs = recs.filter(r => terms.includes(Number(r.term)));
+            
             if (sRecs.length > 0) {
                 const sAvg = sRecs.reduce((sum, r) => sum + r.avg, 0) / sRecs.length;
                 if (metric.m === 'TOTAL') val = sRecs.reduce((sum, r) => sum + r.total, 0).toFixed(0);
                 else if (metric.m === 'AVG') val = sAvg.toFixed(1);
-                else if (metric.m === 'ABSENT') val = sRecs.reduce((sum, r) => sum + Number(r.absent), 0);
-                else if (metric.m === 'COND.') val = "_ _"; // Conduct placeholder
+                else if (metric.m === 'ABSENT') val = (t==='S1'||t==='S2') ? "_ _" : sRecs.reduce((sum, r) => sum + Number(r.absent), 0);
+                else if (metric.m === 'COND.') val = (t==='S1'||t==='S2') ? "_ _" : sRecs[sRecs.length - 1].conduct || "-";
+                else if (metric.m === 'COMMENT') val = (t==='S1'||t==='S2') ? "_ _" : getAutoComment(sAvg);
                 else val = getRank(sAvg, allIds.map(id => { 
                     const sr = classData.filter(d => d.no == id && terms.includes(Number(d.term))); 
                     return sr.length > 0 ? (sr.reduce((sum, r) => sum + r.avg, 0) / sr.length) : null; 
                 }));
             }
-            tableHtml += `<td style="font-weight:bold">${val}</td>`;
+            tableHtml += `<td style="font-size:9px">${val}</td>`;
         });
+
         const annAvg = (recs.reduce((sum, r) => sum + r.avg, 0) / recs.length);
         let annVal = "-";
         if (metric.m === 'TOTAL') annVal = recs.reduce((sum, r) => sum + r.total, 0).toFixed(0);
         else if (metric.m === 'AVG') annVal = annAvg.toFixed(1);
-        else if (metric.m === 'ABSENT') annVal = recs.reduce((sum, r) => sum + Number(r.absent), 0);
-        else if (metric.m === 'COND.') annVal = "_ _";
+        else if (metric.m === 'ABSENT' || metric.m === 'COND.' || metric.m === 'COMMENT') annVal = "_ _";
         else if (metric.m === 'RANK') annVal = getRank(annAvg, allIds.map(id => { const sr = classData.filter(d => d.no == id); return sr.length > 0 ? (sr.reduce((sum, r) => sum + r.avg, 0) / sr.length) : null; }));
-        tableHtml += `<td style="background:#fefce8">${annVal}</td></tr>`;
+        
+        tableHtml += `<td style="background:#fefce8; font-size:9px">${annVal}</td></tr>`;
     });
-
-    const lastComment = recs.length > 0 ? recs[recs.length-1].comment : "";
 
     return `
     <div class="card-content">
@@ -465,9 +461,6 @@ function buildCardHTML(no, g, s, classData) {
                 <div>Age: <b>${recs[0].age}</b></div>
             </div>
             ${tableHtml}</tbody></table>
-            <div style="margin-top:10px; border:1px solid var(--card-blue); padding:5px; font-size:11px">
-                <b>Teacher's Comment:</b> ${lastComment}
-            </div>
             <div class="signature-area">
                 <div class="sig-line">Parent</div><div class="sig-line">Teacher</div><div class="sig-line">Director</div>
             </div>
