@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>DIA Grade Pro - Official Roster</title>
+<title>DIA Grade Pro - Bold Borders Edition</title>
 
-<!-- PWA Settings -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22DIAGradePro%22,%22short_name%22:%22GradePro%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22#1e40af%22,%22theme_color%22:%22#1e40af%22}">
@@ -15,24 +14,43 @@
 *{box-sizing:border-box;font-family: 'Nyala', 'Abyssinica SIL', 'Segoe UI', sans-serif}
 body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-.roster-print-header { display: none; text-align: center; border-bottom: 2px double #000; margin-bottom: 15px; padding: 10px; background: #fff; }
+.roster-print-header { display: none; text-align: center; border-bottom: 3px double #000; margin-bottom: 15px; padding: 10px; background: #fff; }
 
 @media print {
-    @page { size: A4 portrait; margin: 8mm; }
-    .btn-modal-hide, .app-header, .top, .bar, .stats-bar, .btn, #login, .no-print { display: none !important; }
-    body, html { background: white !important; overflow: visible !important; height: auto !important; width: 100% !important; display: block !important; }
+    @page { size: A4 landscape; margin: 5mm; }
+    .btn-modal-hide, .app-header, .top, .bar, .stats-bar, .btn, #login, .no-print, .sync-badge { display: none !important; }
+    body, html { background: white !important; overflow: visible !important; height: auto !important; width: 100% !important; display: block !important; color: #000 !important;}
     #app { display: block !important; }
     main { overflow: visible !important; display: block !important; padding: 0 !important; width: 100% !important; margin: 0 !important; }
-    
     body.printing-roster .roster-print-header { display: block !important; }
-    body.printing-roster #mainTable { width: 100% !important; border: 1.5px solid #000 !important; display: table !important; }
+    body.printing-roster #mainTable { width: 100% !important; border: 2.5px solid #000 !important; display: table !important; border-collapse: collapse !important;}
     
-    body.printing-roster tbody { page-break-inside: avoid !important; break-inside: avoid-page !important; }
-    
+    body.printing-roster thead th { 
+        background-color: #e2e8f0 !important; 
+        color: #000000 !important; 
+        font-weight: 900 !important; 
+        font-size: 11px !important;
+        border: 2px solid #000000 !important; 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact;
+    }
+    body.printing-roster td { border: 1.5px solid #000 !important; font-weight: bold !important; font-size: 10px !important; padding: 3px !important;}
     body.printing-cards #tableContainer { display: none !important; }
     body.printing-cards #modal { display: block !important; position: relative !important; background: white !important; padding: 0 !important; width: 100% !important; }
-    body.printing-cards .card-content { width: 100% !important; height: auto !important; min-height: 120mm; margin: 0 0 10mm 0 !important; padding: 5mm !important; border: 2px solid var(--card-blue) !important; page-break-inside: avoid; break-inside: avoid; }
-    th, td { border: 1px solid #000 !important; padding: 3px !important; font-size: 10px !important; }
+    
+    body.printing-cards .card-content { 
+        width: 48% !important; 
+        height: 138mm !important; 
+        margin: 0 auto 4mm auto !important; 
+        padding: 4mm !important; 
+        border: 2.5px solid #1e3a8a !important; 
+        page-break-inside: avoid !important; 
+        break-inside: avoid !important; 
+        display: inline-block !important; 
+        box-sizing: border-box !important; 
+        vertical-align: top;
+        font-weight: bold !important; 
+    }
 }
 
 .app-header { background: #111827; color: white; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--w); }
@@ -52,33 +70,41 @@ input, select { padding: 5px; border: 1px solid #cbd5e1; border-radius: 4px; fon
 .btn { padding: 8px 14px; border: 0; border-radius: 4px; color: #fff; font-weight: 700; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px }
 
 main { flex: 1; overflow: auto; padding: 8px; background: #fff }
-table { border-collapse: collapse; background: #fff; width: 100%; font-size: 11px }
-th, td { border: 1px solid #475569; padding: 6px 10px; text-align: center; color: #000 }
-th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
-.stats-bar { display: flex; gap: 20px; padding: 10px; background: #f8fafc; border-top: 1.5px solid #cbd5e1; font-weight: bold; font-size: 13px; }
+/* 🔴 Roster Borders Strengthened */
+table { border-collapse: collapse; background: #fff; width: 100%; font-size: 11px; border: 2px solid #000; }
+th, td { border: 1.5px solid #000; padding: 5px 6px; text-align: center; color: #000; }
+
+th { 
+    background: #1e293b; 
+    color: #ffffff; 
+    font-weight: 900; 
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    position: sticky; 
+    top: 0; 
+    z-index: 10; 
+}
+
+.stats-bar { display: flex; gap: 20px; padding: 10px; background: #f8fafc; border-top: 2px solid #cbd5e1; font-weight: bold; font-size: 13px; }
 #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 99999; overflow-y: auto; padding: 20px }
 .card-content { background: #fff; width: 165mm; margin: 0 auto 20px auto; padding: 5mm; border-radius: 4px; color: #000; }
-.main-card-border { border: 2px solid var(--card-blue); padding: 5px; height: 100%; }
-.card-header-box { text-align: center; border-bottom: 2px solid var(--card-blue); padding-bottom: 5px; margin-bottom: 8px; }
+.main-card-border { border: 3px solid var(--card-blue); padding: 5px; height: 100%; }
+.card-header-box { text-align: center; border-bottom: 2.5px solid var(--card-blue); padding-bottom: 5px; margin-bottom: 8px; }
 .card-title-main { font-size: 18px; font-weight: 900; color: var(--card-blue); margin: 0; }
 .year-badge { display: inline-block; background: var(--card-blue); color: white; padding: 2px 15px; border-radius: 12px; font-size: 12px; margin-top: 4px; }
 
-.info-grid { display: grid; grid-template-columns: 1.2fr 0.6fr 0.8fr 0.4fr; border: 1.5px solid var(--card-blue); margin-bottom: 8px; font-size: 12px; background: #f8fafc; }
-.info-grid div { padding: 4px; border-right: 1.5px solid var(--card-blue); }
-.info-grid div:last-child { border-right: none; }
+/* 🔴 Report Card Table Borders Harmonized */
+.card-table { width: 100%; border-collapse: collapse; border: 2.5px solid #000 !important; }
+.card-table th { border: 1.5px solid #000 !important; padding: 4px; background: #f1f5f9; color: #000; font-size: 11px; line-height: 1.2; font-weight: bold; }
+.card-table td { border: 1.5px solid #000 !important; padding: 4px; text-align: center; font-weight: bold; font-size: 11px; color: #000; }
 
-.card-table { width: 100%; border-collapse: collapse; border: 1.5px solid var(--card-blue); }
-.card-table th { border: 1px solid var(--card-blue); padding: 3px; background: #f1f5f9; color: var(--card-blue); font-size: 10px; line-height: 1.2; }
-.card-table td { border: 1px solid #ccc; padding: 3px; text-align: center; font-weight: bold; font-size: 11px; }
-.highlight-cell { background: #f1f5f9; color: var(--card-blue); }
-
-.signature-area { margin-top: 20px; display: flex; justify-content: space-between; width: 100%; padding: 0 5px; }
-.sig-line { width: 30%; border-top: 1.5px solid #000; text-align: center; padding-top: 3px; font-weight: 900; font-size: 10px; }
-
-.sync-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 10px; }
+.sync-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 10px; font-weight: bold; }
 .sync-on { background: #dcfce7; color: #166534; }
 .sync-off { background: #fee2e2; color: #991b1b; }
+
+.act-btn { border:none; background:none; cursor:pointer; font-size:12px; padding:2px 4px; }
+.act-btn:hover { transform: scale(1.2); }
 </style>
 </head>
 <body>
@@ -95,10 +121,10 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
     <div class="app-header">
         <div style="display:flex; align-items:center">
             <div style="font-weight:900">DIA GRADE PRO / ዲአይኤ ግሬድ</div>
-            <span id="cloudStatus" class="sync-badge sync-off">Cloud: Local Mode</span>
+            <span id="cloudStatus" class="sync-badge sync-off">Cloud: Connecting...</span>
         </div>
         <div style="display:flex; gap:15px; align-items:center">
-            <span>Dev: Taddesse M.</span>
+            <span>Developed by: Taddesse M.</span>
             <button class="btn" style="background:var(--w); color:#000" onclick="toggleForm()">↕ እጠፍ/ዘርጋ (Fold)</button>
         </div>
     </div>
@@ -113,16 +139,17 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         </div>
         <div class="row" style="border-top:1px solid #eee;padding-top:10px">
             <input type="hidden" id="e_id" value="-1">
-            <div class="fld"><label>No. / ተ.ቁ</label><input type="number" id="e_n" style="width:50px"></div>
+            <div class="fld"><label>No. / ተራ ቁጥር</label><input type="number" id="e_n" readonly style="width:55px; background:#e2e8f0; font-weight:bold; text-align:center;"></div>
             <div class="fld"><label>Name / ስም</label><input type="text" id="e_m" style="width:160px"></div>
-            <div class="fld"><label>Sex / ጾታ</label><select id="e_x"><option>M</option><option>F</option></select></div>
+            <div class="fld"><label>Sex / ጾታ</label><select id="e_x"><option>Male</option><option>Female</option></select></div>
             <div class="fld"><label>Age / እድሜ</label><input type="number" id="e_a" style="width:40px"></div>
-            <div class="fld"><label>Term / ክፍለ ጊዜ</label><select id="e_t"></select></div>
+            <div class="fld"><label>Terms/ ክፍለ ጊዜ</label><select id="e_t" onchange="handleTermSelectManualChange()"></select></div>
             <div class="fld"><label>Conduct / ጠባይ</label><select id="e_c"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
             <div class="fld"><label>Absent / የቀረ</label><input type="number" id="e_abs" value="0" style="width:45px"></div>
-            <div class="fld"><label>Note / አስተያየት (ባዶ ቢተው በራሱ ይሞላል)</label><input type="text" id="e_com" style="width:180px" placeholder="Auto-generated if empty"></div>
+            <div class="fld"><label>Note / አስተያየት</label><input type="text" id="e_com" style="width:180px" placeholder="Auto-generated if empty"></div>
             <div id="subjectInputs" style="display:flex;gap:4px"></div>
             <button class="btn" style="background:var(--s)" id="saveBtn" onclick="saveData()">💾 SAVE / መዝግብ</button>
+            <button class="btn" style="background:#475569" onclick="clearFormForNewStudent(true)">➕ NEW STUDENT</button>
         </div>
         <div class="row" style="background:#fffbeb; padding:5px; border-radius:5px">
             <div class="fld"><label>GRADE / ክፍል</label><input type="text" id="view_g" value="Grade 4" style="width:70px" oninput="updateViewState()"></div>
@@ -138,7 +165,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         <button class="btn" style="background:var(--s)" onclick="addSubject()">➕ ADD SUB / ትምህርት ጨምር</button>
         <button class="btn" style="background:var(--d)" onclick="clearAllData()">⚠️ CLEAR / አጥፋ</button>
         <button class="btn" style="background:var(--tg)" onclick="syncWithCloud()">☁️ PUSH CLOUD / ደመና ጫን</button>
-        <button class="btn" style="background:#ea580c" onclick="pullFromCloud()">📥 PULL CLOUD / አውርድ</button>
+        <button class="btn" style="background:#ea580c" onclick="pullFromCloud(true)">📥 PULL CLOUD / አውርድ</button>
         <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(event)">
         <input type="text" id="searchQ" placeholder="🔍 ስም ፈልግ (Search)..." onkeyup="renderTable()" style="width:180px; flex-shrink:0">
     </div>
@@ -160,102 +187,143 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
     <div id="cardView"></div>
 </div>
 
-<!-- Firebase Logic -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCIQLl6EGGscg35mSpFvhhGYSU84IANNxQ",
-        authDomain: "dia-ros.firebaseapp.com",
-        databaseURL: "https://dia-ros-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "dia-ros",
-        storageBucket: "dia-ros.firebasestorage.app",
-        messagingSenderId: "233753558416",
-        appId: "1:233753558416:web:d9f2dfc86593a1c996c715"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    // ወደ ክላውድ ለመጫን
-    window.syncWithCloud = async function() {
-        const status = document.getElementById('cloudStatus');
-        const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
-        const vs = document.getElementById('view_s').value.trim();
-        
-        status.innerText = "Syncing...";
-        
-        try {
-            await set(ref(db, `rosters/${vg}/${vs}`), DATA);
-            status.innerText = "Cloud: Synchronized";
-            status.className = "sync-badge sync-on";
-            alert("ዳታው ወደ ክላውድ (Firebase) ተልኳል!");
-        } catch (err) {
-            status.innerText = "Sync Failed";
-            status.className = "sync-badge sync-off";
-            alert("ስህተት: " + err.message);
-        }
-    };
-
-    // ከክላውድ ለማውረድ
-    window.pullFromCloud = async function() {
-        const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
-        const vs = document.getElementById('view_s').value.trim();
-        const dbRef = ref(db);
-        
-        try {
-            const snapshot = await get(child(dbRef, `rosters/${vg}/${vs}`));
-            if (snapshot.exists()) {
-                if(confirm("ክላውድ ላይ ያለውን ዳታ አውርጄ አሁን ያለውን ልተካው?")) {
-                    DATA = snapshot.val();
-                    localStorage.setItem('_DIA_DATA_V10_DUAL', JSON.stringify(DATA));
-                    renderTable();
-                    alert("ዳታው ከክላውድ ወርዷል!");
-                }
-            } else {
-                alert("በዚህ ክፍል ክላውድ ላይ ምንም ዳታ አልተገኘም!");
-            }
-        } catch (err) {
-            alert("Error: " + err.message);
-        }
-    };
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <script>
-const DB_KEY = '_DIA_DATA_V10_DUAL';
+const firebaseConfig = {
+    apiKey: "AIzaSyCIQLl6EGGscg35mSpFvhhGYSU84IANNxQ",
+    authDomain: "dia-ros.firebaseapp.com",
+    databaseURL: "https://dia-ros-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "dia-ros",
+    storageBucket: "dia-ros.firebasestorage.app",
+    messagingSenderId: "233753558416",
+    appId: "1:233753558416:web:d9f2dfc86593a1c996c715"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 const SUB_KEY = '_DIA_SUBS_PERMANENT';
 const STATE_KEY = '_DIA_STATE';
 
-let DATA = JSON.parse(localStorage.getItem(DB_KEY)) || [];
+let DATA = []; 
 let SUBJECTS = [];
+let currentCloudRef = null;
+let isFirstLoadComplete = false; 
+
+function getLocalKey() {
+    const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
+    const vs = document.getElementById('view_s').value.trim().replace(/\s+/g, '_');
+    return `_LOCAL_DATA_${vg}_${vs}`;
+}
+
+function getCloudPath() {
+    const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
+    const vs = document.getElementById('view_s').value.trim().replace(/\s+/g, '_');
+    return `rosters/${vg}_${vs}`;
+}
+
+function startRealtimeSync() {
+    const status = document.getElementById('cloudStatus');
+    const path = getCloudPath();
+    const localKey = getLocalKey();
+    
+    if (currentCloudRef) { currentCloudRef.off(); }
+    
+    status.innerText = "Connecting...";
+    status.className = "sync-badge sync-off";
+    isFirstLoadComplete = false;
+    
+    const backup = localStorage.getItem(localKey);
+    if(backup) {
+        DATA = JSON.parse(backup);
+        renderTable();
+        updateNextID();
+    } else {
+        DATA = [];
+        renderTable();
+    }
+    
+    currentCloudRef = db.ref(path);
+    
+    db.ref(".info/connected").on("value", function(snap) {
+        if (snap.val() === true) {
+            status.innerText = "Cloud: Online ✨";
+            status.className = "sync-badge sync-on";
+        } else {
+            status.innerText = "Cloud: Offline ⚠️";
+            status.className = "sync-badge sync-off";
+        }
+    });
+
+    currentCloudRef.on('value', (snapshot) => {
+        isFirstLoadComplete = true; 
+        if (snapshot.exists()) {
+            DATA = snapshot.val() || [];
+            localStorage.setItem(localKey, JSON.stringify(DATA));
+            renderTable();
+            updateNextID();
+        }
+    }, (error) => {
+        console.error("Cloud read failed: ", error);
+        isFirstLoadComplete = true; 
+    });
+}
+
+async function syncWithCloud() {
+    const localKey = getLocalKey();
+    localStorage.setItem(localKey, JSON.stringify(DATA));
+
+    try {
+        await db.ref(getCloudPath()).set(DATA);
+        return true;
+    } catch (err) {
+        console.error("Sync failed:", err);
+        alert("⚠️ ማስጠንቀቂያ፡ መረጃው ስልክዎ ላይ ተቀምጧል ነገር ግን ወደ ክላውድ አልተጫነም! Error: " + err.message);
+        return false;
+    }
+}
+
+window.pullFromCloud = async function(manual = false) {
+    if(manual) {
+        if(confirm("ክላውድ ላይ ያለውን ዳታ በኃይል አውርጄ አሁን ያለውን ልተካው?")) {
+            startRealtimeSync();
+        }
+    }
+};
 
 function checkLogin() {
     if(document.getElementById('passInput').value === "1234") {
         document.getElementById('login').style.display='none';
         document.getElementById('app').style.display='flex';
-        initApp();
+        initApp(); 
     } else alert("Wrong Password! / የተሳሳተ የይለፍ ቃል!");
 }
 
 function initApp() {
     const savedSubs = localStorage.getItem(SUB_KEY);
     if(savedSubs) document.getElementById('h_b').value = savedSubs;
+    
     const s = JSON.parse(localStorage.getItem(STATE_KEY));
-    if(s) { document.getElementById('view_g').value = s.g; document.getElementById('view_s').value = s.s; }
+    if(s) { 
+        document.getElementById('view_g').value = s.g; 
+        document.getElementById('view_s').value = s.s; 
+    }
+    
     SUBJECTS = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x);
     const mode = document.getElementById('h_m').value;
     
     document.getElementById('e_t').innerHTML = mode === 'semester' 
-        ? '<option value="1">Sem 1 / 1ኛ ሴሚ</option><option value="2">Sem 2 / 2ኛ ሴሚ</option>' 
-        : '<option value="1">Q 1 / 1ኛ ኳርተር</option><option value="2">Q 2 / 2ኛ ኳርተር</option><option value="3">Q 3 / 3ኛ ኳርተር</option><option value="4">Q 4 / 4ኛ ኳርተር</option>';
+        ? '<option value="1">Sem 1</option><option value="2">Sem 2</option>' 
+        : '<option value="1">Q 1</option><option value="2">Q 2</option><option value="3">Q 3</option><option value="4">Q 4</option>';
     
     document.getElementById('subjectInputs').innerHTML = SUBJECTS.map((s, i) => `
         <div class="fld"><label>${s}</label><input type="number" class="mark-input" data-subj="${s}" id="m_${i}" 
         style="width:40px;text-align:center" oninput="autoJump(${i})" onkeydown="handleEnter(event, ${i})"></div>
     `).join('');
-    updateNextID(); 
-    renderTable();
+    
+    startRealtimeSync(); 
 }
 
 function getAutoComment(avg) {
@@ -272,34 +340,241 @@ function toggleForm() { document.getElementById('inputForm').classList.toggle('c
 function autoJump(idx) { if (document.getElementById(`m_${idx}`).value.length >= 2) { const next = document.getElementById(`m_${idx + 1}`); if (next) next.focus(); else document.getElementById('saveBtn').focus(); } }
 function handleEnter(e, idx) { if (e.key === 'Enter') { e.preventDefault(); const next = document.getElementById(`m_${idx + 1}`); if (next) next.focus(); else saveData(); } }
 function saveSubs() { localStorage.setItem(SUB_KEY, document.getElementById('h_b').value); SUBJECTS = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x); initApp(); }
-function updateViewState() { localStorage.setItem(STATE_KEY, JSON.stringify({g: document.getElementById('view_g').value, s: document.getElementById('view_s').value})); updateNextID(); renderTable(); }
+
+function updateViewState() { 
+    localStorage.setItem(STATE_KEY, JSON.stringify({g: document.getElementById('view_g').value, s: document.getElementById('view_s').value})); 
+    startRealtimeSync(); 
+}
 
 function handlePrintRoster() { document.body.classList.remove('printing-cards'); document.body.classList.add('printing-roster'); window.print(); }
 function handlePrintCards() {
     const vg = document.getElementById('view_g').value, vs = document.getElementById('view_s').value;
-    const mode = document.getElementById('h_m').value;
-    const classData = DATA.filter(d => d.grade === vg && d.sec === vs && d.mode === mode);
-    const ids = [...new Set(classData.map(d => d.no))].sort((a,b)=>a-b);
-    document.getElementById('cardView').innerHTML = ids.map(id => buildCardHTML(id, vg, vs, classData)).join('');
-    document.body.classList.remove('printing-roster'); document.body.classList.add('printing-cards');
+    DATA.sort((a, b) => a.name.localeCompare(b.name, 'am'));
+    document.getElementById('cardView').innerHTML = DATA.map(s => buildCardHTML(s.no, vg, vs, DATA)).join('');
+    document.body.classList.remove('printing-roster'); 
+    document.body.classList.add('printing-cards');
     document.getElementById('modal').style.display = 'block';
 }
+
+function showCard(studentNo) {
+    const vg = document.getElementById('view_g').value, vs = document.getElementById('view_s').value;
+    document.getElementById('cardView').innerHTML = buildCardHTML(studentNo, vg, vs, DATA);
+    document.body.classList.remove('printing-roster'); 
+    document.body.classList.add('printing-cards');
+    document.getElementById('modal').style.display = 'block';
+}
+
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
 function updateNextID() {
-    const vg = document.getElementById('view_g').value, vs = document.getElementById('view_s').value;
-    const mode = document.getElementById('h_m').value;
-    const classData = DATA.filter(d => d.grade === vg && d.sec === vs && d.mode === mode);
-    const students = [...new Set(classData.map(d => parseInt(d.no)))];
-    document.getElementById('e_n').value = students.length > 0 ? Math.max(...students) + 1 : 1;
+    if(document.getElementById('e_id').value !== "-1") return; 
+    const studentNums = DATA.map(d => parseInt(d.no)).filter(n => !isNaN(n));
+    document.getElementById('e_n').value = studentNums.length > 0 ? Math.max(...studentNums) + 1 : 1;
+}
+
+function handleTermSelectManualChange() {
+    const id = document.getElementById('e_id').value;
+    if (id === "-1") {
+        const currentName = document.getElementById('e_m').value.trim();
+        if(currentName) {
+            const existing = DATA.find(s => s.name.toLowerCase() === currentName.toLowerCase());
+            if(existing) {
+                document.getElementById('e_n').value = existing.no;
+                return;
+            }
+        }
+        updateNextID();
+    }
 }
 
 function getRank(avg, allAvgs) {
     if(!avg || allAvgs.length === 0) return "-";
-    const filtered = allAvgs.filter(v => v !== null && v > 0);
-    const sorted = [...new Set(filtered)].sort((a,b) => b-a);
-    return (sorted.indexOf(avg) + 1) + "/" + filtered.length;
+    const sorted = [...allAvgs].sort((a,b) => b-a);
+    const rank = sorted.indexOf(avg) + 1;
+    return rank + "/" + allAvgs.length;
 }
+
+async function saveData() {
+    const id = document.getElementById('e_id').value;
+    let no = document.getElementById('e_n').value.trim();
+    const name = document.getElementById('e_m').value.trim();
+    const sex = document.getElementById('e_x').value;
+    const age = document.getElementById('e_a').value.trim();
+    const term = parseInt(document.getElementById('e_t').value);
+    const conduct = document.getElementById('e_c').value;
+    const absent = parseInt(document.getElementById('e_abs').value) || 0;
+    const note = document.getElementById('e_com').value.trim();
+    const mode = document.getElementById('h_m').value;
+
+    if(!name) { alert("እባክዎ መጀመሪያ የተማሪ ስም ያስገቡ!"); return; }
+
+    let studentIdx = DATA.findIndex(s => s.id === id || (id === "-1" && s.name.toLowerCase() === name.toLowerCase()));
+    if(studentIdx > -1) {
+        no = DATA[studentIdx].no; 
+    } else {
+        const studentNums = DATA.map(d => parseInt(d.no)).filter(n => !isNaN(n));
+        no = studentNums.length > 0 ? (Math.max(...studentNums) + 1).toString() : "1";
+    }
+    document.getElementById('e_n').value = no;
+
+    let marks = {};
+    let total = 0;
+    let subCount = 0;
+    SUBJECTS.forEach((sub, i) => {
+        const val = parseFloat(document.getElementById(`m_${i}`).value);
+        if(!isNaN(val)) {
+            marks[sub] = val;
+            total += val;
+            subCount++;
+        } else { marks[sub] = 0; }
+    });
+
+    const avg = subCount > 0 ? parseFloat((total / subCount).toFixed(4)) : 0; 
+    const finalComment = note || getAutoComment(avg);
+
+    if(studentIdx > -1) {
+        if(!DATA[studentIdx].terms) DATA[studentIdx].terms = {};
+        DATA[studentIdx].terms[term] = { marks, total, avg, conduct, absent, comment: finalComment };
+        DATA[studentIdx].name = name;
+        DATA[studentIdx].sex = sex;
+        DATA[studentIdx].age = age;
+        DATA[studentIdx].no = no;
+    } else {
+        let newStudent = {
+            id: id === "-1" ? "_" + Math.random().toString(36).substr(2, 9) : id,
+            no: no, name: name, sex: sex, age: age, terms: {}
+        };
+        newStudent.terms[term] = { marks, total, avg, conduct, absent, comment: finalComment };
+        DATA.push(newStudent);
+    }
+
+    await syncWithCloud();
+
+    SUBJECTS.forEach((_, i) => document.getElementById(`m_${i}`).value = "");
+    document.getElementById('e_com').value = "";
+    
+    renderTable();
+
+    const isLastTerm = (mode === 'quarter' && term === 4) || (mode === 'semester' && term === 2);
+    if (isLastTerm) {
+        clearFormForNewStudent(false); 
+    } else {
+        const currentTermSelect = document.getElementById('e_t');
+        if(currentTermSelect.selectedIndex < currentTermSelect.options.length - 1) {
+            currentTermSelect.selectedIndex += 1;
+        }
+        setTimeout(() => {
+            const firstMarkField = document.getElementById('m_0');
+            if(firstMarkField) firstMarkField.focus();
+        }, 80);
+    }
+}
+
+function clearFormForNewStudent(forceManual = false) {
+    document.getElementById('e_id').value = "-1";
+    document.getElementById('e_m').value = "";
+    document.getElementById('e_a').value = "";
+    document.getElementById('e_com').value = "";
+    document.getElementById('e_t').selectedIndex = 0; 
+    SUBJECTS.forEach((_, i) => document.getElementById(`m_${i}`).value = "");
+    updateNextID(); 
+    setTimeout(() => {
+        const nameField = document.getElementById('e_m');
+        if(nameField) nameField.focus();
+    }, 100);
+}
+
+window.editRec = function(studentId, term) {
+    const student = DATA.find(s => s.id === studentId);
+    if(!student || !student.terms || !student.terms[term]) return;
+
+    document.getElementById('e_id').value = student.id;
+    document.getElementById('e_n').value = student.no;
+    document.getElementById('e_m').value = student.name;
+    document.getElementById('e_x').value = student.sex;
+    document.getElementById('e_a').value = student.age;
+    document.getElementById('e_t').value = term;
+    
+    const tData = student.terms[term];
+    document.getElementById('e_c').value = tData.conduct || "A";
+    document.getElementById('e_abs').value = tData.absent || 0;
+    document.getElementById('e_com').value = tData.comment || "";
+
+    SUBJECTS.forEach((sub, i) => {
+        document.getElementById(`m_${i}`).value = tData.marks[sub] !== undefined ? tData.marks[sub] : "";
+    });
+
+    document.getElementById('inputForm').classList.remove('collapsed');
+    document.getElementById('m_0').focus();
+};
+
+window.deleteQuarterData = async function(studentId, term) {
+    if(confirm(`የዚህን ተማሪ የ Q${term} / Sem${term} ዳታ ማጥፋት ይፈልጋሉ?`)) {
+        const student = DATA.find(s => s.id === studentId);
+        if(student && student.terms) {
+            delete student.terms[term];
+            await syncWithCloud();
+            renderTable();
+        }
+    }
+};
+
+window.delEntireStudent = async function(studentId) {
+    if(confirm("ይህንን ተማሪ ከነ ሙሉ ዓመታዊ ማርኩ ሙሉ በሙሉ ለማጥፋት እርግጠኛ ነዎት?")) {
+        DATA = DATA.filter(s => s.id !== studentId);
+        await syncWithCloud();
+        renderTable();
+    }
+};
+
+window.clearAllData = async function() {
+    if(confirm("⚠️ አስቸኳይ ማስጠንቀቂያ! በዚህ ክፍል ስር ያሉትን ሁሉንም ተማሪዎች እና ማርኮች በአንድ ጊዜ ለማጥፋት እርግጠኛ ነዎት?")) {
+        DATA = [];
+        await syncWithCloud();
+        renderTable();
+    }
+};
+
+window.exportJSON = function() {
+    if(DATA.length === 0) { alert("የሚወርድ ምንም ዳታ የለም!"); return; }
+    const vg = document.getElementById('view_g').value.trim();
+    const vs = document.getElementById('view_s').value.trim();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DATA));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `DIA_Roster_${vg}_${vs}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+};
+
+window.importJSON = async function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if(Array.isArray(importedData)) {
+                DATA = importedData;
+                await syncWithCloud();
+                renderTable();
+                alert("ሮስተር በተሳካ ሁኔታ ወደ ነበረበት ተመልሷል!");
+            } else { alert("የተሳሳተ የፋይል ፎርማት!"); }
+        } catch (err) { alert("JSON ፋይሉን ማንበብ አልተቻለም!"); }
+    };
+    reader.readAsText(file);
+};
+
+window.addSubject = function() {
+    const newSub = prompt("እባክዎ አዲሱን የትምህርት ዓይነት ስም ያስገቡ (ለምሳሌ: Amharic)፦");
+    if(newSub && newSub.trim()) {
+        let currentSubs = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x);
+        currentSubs.push(newSub.trim());
+        document.getElementById('h_b').value = currentSubs.join(', ');
+        saveSubs();
+    }
+};
 
 function renderTable() {
     const vg = document.getElementById('view_g').value, vs = document.getElementById('view_s').value, mode = document.getElementById('h_m').value;
@@ -307,270 +582,243 @@ function renderTable() {
     const academicYear = document.getElementById('h_y').value;
     const search = document.getElementById('searchQ').value.toLowerCase();
     
-    let classData = DATA.filter(d => d.grade === vg && d.sec === vs && d.mode === mode);
-    if(search) classData = classData.filter(d => d.name.toLowerCase().includes(search));
-    const students = [...new Set(classData.map(d => d.no))].sort((a,b)=>a-b);
-    
-    document.getElementById('statM').innerText = `M / ወ: ${students.filter(no => classData.find(d => d.no == no).sex === 'M').length}`;
-    document.getElementById('statF').innerText = `F / ሴ: ${students.filter(no => classData.find(d => d.no == no).sex === 'F').length}`;
-    document.getElementById('statT').innerText = `Total / ድምር: ${students.length}`;
+    let students = [...DATA];
+    students.sort((a, b) => a.name.localeCompare(b.name, 'am'));
+    if(search) students = students.filter(s => s.name.toLowerCase().includes(search));
+
+    const mCount = students.filter(s => s.sex === 'M' || s.sex === 'ወ').length;
+    const fCount = students.filter(s => s.sex === 'F' || s.sex === 'ሴ').length;
+    const tCount = students.length;
 
     document.getElementById('rosterHeader').innerHTML = `
-        <h1 style="margin:0;">${schoolName}</h1>
-        <h2 style="margin:5px 0;">Student Progress Roster / ተማሪዎች ውጤት መመዝገቢያ (${mode === 'quarter' ? 'Quarter' : 'Semester'})</h2>
-        <div style="display:flex; justify-content:space-around; font-weight:bold; border:1px solid #000; padding:5px;">
-            <span>Grade: ${vg} - ${vs}</span> <span>Year: ${academicYear}</span>
+        <h1 style="margin:0; font-weight:900; color:#000; font-size:22px;">${schoolName}</h1>
+        <h2 style="margin:5px 0; font-weight:900; color:#000; font-size:18px;">Student Progress Roster - Official Yearly Layout</h2>
+        <div style="display:flex; justify-content:space-around; font-weight:900; border:2.5px solid #000; padding:8px; background:#f3f4f6; color:#000;">
+            <span>Grade: ${vg} - ${vs}</span> <span>ACADEMIC YEAR: ${academicYear}</span>
         </div>
     `;
 
-    let html = `<thead><tr><th rowspan="2">No.<br>ተ.ቁ</th><th rowspan="2">Name / ስም</th><th rowspan="2">Sex<br>ጾታ</th><th rowspan="2">Age<br>እድሜ</th><th rowspan="2">Term<br>ክፍለ ጊዜ</th><th colspan="${SUBJECTS.length}">SUBJECTS / ትምህርቶች</th><th rowspan="2">Total<br>ድምር</th><th rowspan="2">Avg<br>አማካይ</th><th rowspan="2">Rank<br>ደረጃ</th><th rowspan="2">Cond.<br>ጠባይ</th><th rowspan="2">Abs.<br>ቀረታ</th><th rowspan="2" class="btn-modal-hide">Act</th></tr><tr>${SUBJECTS.map(s=>`<th>${s}</th>`).join('')}</tr></thead>`;
-    
-    students.forEach(no => {
-        const recs = classData.filter(d => d.no == no).sort((a,b)=>a.term - b.term);
-        html += `<tbody>`;
-        recs.forEach((r, i) => {
-            const tAvgs = classData.filter(d => d.term == r.term).map(d => d.avg);
-            const span = recs.length + (mode === 'quarter' ? (recs.some(rx=>rx.term==2)?1:0) + (recs.some(rx=>rx.term==4)?1:0) : 0) + 1;
-            
-            html += `<tr>${i===0?`<td rowspan="${span}">${no}</td><td rowspan="${span}" style="text-align:left">${r.name}</td><td rowspan="${span}">${r.sex}</td><td rowspan="${span}">${r.age}</td>`:''}<td>${mode==='quarter'?'Q':'Sem'} ${r.term}</td>${SUBJECTS.map(s=>`<td>${r.marks[s] || 0}</td>`).join('')}<td>${r.total.toFixed(0)}</td><td>${r.avg.toFixed(1)}</td><td>${getRank(r.avg, tAvgs)}</td><td>${r.conduct}</td><td>${r.absent}</td><td class="btn-modal-hide"><button onclick="editRec(${r.id})">✏️</button><button onclick="delRec(${r.id})">🗑️</button></td></tr>`;
-            
-            if(mode==='quarter' && r.term == 2) html += renderSubRow(no, vg, vs, [1,2], "SEM 1 AVG", classData);
-            if(mode==='quarter' && r.term == 4) html += renderSubRow(no, vg, vs, [3,4], "SEM 2 AVG", classData);
-        });
-        if(recs.length > 0) html += renderSubRow(no, vg, vs, mode==='quarter'?[1,2,3,4]:[1,2], "ANNUAL", classData, true);
-        html += `</tbody>`;
+    let html = `<thead>
+        <tr>
+            <th rowspan="2" style="border: 2px solid #000;">No.</th>
+            <th rowspan="2" style="border: 2px solid #000; min-width:160px;">Name / ስም</th>
+            <th rowspan="2" style="border: 2px solid #000;">Sex</th>
+            <th rowspan="2" style="border: 2px solid #000;">Age</th>
+            <th rowspan="2" style="border: 2px solid #000;">Term</th>
+            ${SUBJECTS.map(s => `<th rowspan="2" style="border: 2px solid #000;">${s}</th>`).join('')}
+            <th colspan="3" style="border: 2px solid #000; background:#1d4ed8 !important; color:#ffffff !important;">Summary</th>
+            <th rowspan="2" style="border: 2px solid #000;">Cond.</th>
+            <th rowspan="2" style="border: 2px solid #000;">Abs.</th>
+            <th rowspan="2" class="btn-modal-hide" style="border: 2px solid #000;">Act</th>
+        </tr>
+        <tr>
+            <th style="border: 2px solid #000; background:#1d4ed8 !important; color:#ffffff !important;">Total</th>
+            <th style="border: 2px solid #000; background:#1d4ed8 !important; color:#ffffff !important;">Avg</th>
+            <th style="border: 2px solid #000; background:#b45309 !important; color:#ffffff !important;">Rank</th>
+        </tr>
+    </thead><tbody>`;
+
+    let allQAvgs = {1:[], 2:[], 3:[], 4:[], S1:[], S2:[], AN:[]};
+    students.forEach(st => {
+        [1,2,3,4].forEach(q => { if(st.terms && st.terms[q]) allQAvgs[q].push(st.terms[q].avg); });
+        let s1 = calcTermGroupAvg(st, [1,2]), s2 = calcTermGroupAvg(st, [3,4]), an = calcTermGroupAvg(st, [1,2,3,4]);
+        if(s1) allQAvgs.S1.push(s1.avg); if(s2) allQAvgs.S2.push(s2.avg); if(an) allQAvgs.AN.push(an.avg);
     });
+
+    students.forEach((st, index) => {
+        const autoSN = index + 1; 
+        let renderTerms = mode === 'quarter' ? ['Q1', 'Q2', 'SEM 1', 'Q3', 'Q4', 'SEM 2', 'ANNUAL'] : ['Sem 1', 'Sem 2', 'ANNUAL'];
+        
+        renderTerms.forEach((termLabel, idx) => {
+            let rowStyle = "";
+            if(termLabel === 'ANNUAL') rowStyle = "background:#fefce8; font-weight:900;";
+            else if(termLabel.includes('SEM')) rowStyle = "background:#f1f5f9; font-weight:bold;";
+
+            html += `<tr style="${rowStyle} color:#000;">`;
+            if(idx === 0) {
+                html += `
+                <td rowspan="${renderTerms.length}" style="border:1.5px solid #000; vertical-align:middle; font-weight:900;">${autoSN}</td>
+                <td rowspan="${renderTerms.length}" style="text-align:left; border:1.5px solid #000; padding-left:5px; vertical-align:middle; font-weight:900;">${st.name}</td>
+                <td rowspan="${renderTerms.length}" style="border:1.5px solid #000; vertical-align:middle;">${st.sex}</td>
+                <td rowspan="${renderTerms.length}" style="border:1.5px solid #000; vertical-align:middle;">${st.age}</td>`;
+            }
+            html += `<td style="border:1.5px solid #000; font-weight:900;">${termLabel}</td>`;
+            html += renderRowDataCells(st, termLabel, allQAvgs);
+            html += `</tr>`;
+        });
+    });
+
+    html += `</tbody>`;
     document.getElementById('mainTable').innerHTML = html;
+    document.getElementById('statM').innerText = `M / ወ: ${mCount}`;
+    document.getElementById('statF').innerText = `F / ሴ: ${fCount}`;
+    document.getElementById('statT').innerText = `Total / ድምር: ${tCount}`;
 }
 
-function renderSubRow(no, g, s, terms, label, cData, isAnn=false) {
-    const recs = cData.filter(d => d.no == no && terms.includes(Number(d.term)));
-    if(recs.length === 0) return "";
-    const avg = recs.reduce((sum, r) => sum + r.avg, 0) / recs.length;
-    const totalSum = recs.reduce((sum, r) => sum + r.total, 0) / recs.length;
-    const allIds = [...new Set(cData.map(d => d.no))];
-    const groupAvgs = allIds.map(id => {
-        const sr = cData.filter(d => d.no == id && terms.includes(Number(d.term)));
-        return sr.length > 0 ? (sr.reduce((sum, r) => sum + r.avg, 0) / sr.length) : null;
-    }).filter(v => v !== null);
+function calcTermGroupAvg(st, targetQuarters) {
+    if(!st.terms) return null;
+    let sumTotal = 0, sumAvg = 0, count = 0;
+    let subSums = {}; SUBJECTS.forEach(s=>subSums[s]=0);
     
-    return `<tr style="background:${isAnn?'#fefce8':'#f1f5f9'}; font-weight:bold"><td>${label}</td>${SUBJECTS.map(sub => `<td>${(recs.reduce((u,r)=>u+(r.marks[sub]||0),0)/recs.length).toFixed(1)}</td>`).join('')}<td>${totalSum.toFixed(0)}</td><td>${avg.toFixed(1)}</td><td>${getRank(avg, groupAvgs)}</td><td>_ _</td><td>_ _</td><td class="btn-modal-hide">${isAnn?`<button onclick="showCard('${no}','${g}','${s}')">CARD</button>`:'-'}</td></tr>`;
-}
-
-function showCard(no, g, s) {
-    const mode = document.getElementById('h_m').value;
-    const classData = DATA.filter(d => d.grade === g && d.sec === s && d.mode === mode);
-    document.getElementById('cardView').innerHTML = buildCardHTML(no, g, s, classData);
-    document.body.classList.remove('printing-roster');
-    document.body.classList.add('printing-cards');
-    document.getElementById('modal').style.display = 'block';
-}
-
-// 1. መረጃ ስትመዘግብ ራሱ እንዲጭን (Updated saveData)
-function saveData() {
-    const name = document.getElementById('e_m').value.trim();
-    if(!name) return alert("Enter Name / ስም ያስገቡ!");
-    const currentTerm = parseInt(document.getElementById('e_t').value);
-    const mode = document.getElementById('h_m').value;
-    let marks = {}, total = 0;
-    document.querySelectorAll('.mark-input').forEach(i => { let v = parseFloat(i.value) || 0; marks[i.dataset.subj] = v; total += v; });
-    const avg = total / SUBJECTS.length;
-    const isEdit = document.getElementById('e_id').value !== "-1";
-    const entry = {
-        id: isEdit ? parseFloat(document.getElementById('e_id').value) : Date.now(),
-        no: document.getElementById('e_n').value, name, sex: document.getElementById('e_x').value, age: document.getElementById('e_a').value,
-        grade: document.getElementById('view_g').value, sec: document.getElementById('view_s').value,
-        mode: mode, term: currentTerm, conduct: document.getElementById('e_c').value, absent: document.getElementById('e_abs').value || 0,
-        comment: document.getElementById('e_com').value || getAutoComment(avg), 
-        marks, total, avg: avg
-    };
-    const idx = DATA.findIndex(d => d.id === entry.id);
-    if(idx > -1) DATA[idx] = entry; else DATA.push(entry);
-    
-    // ስልክ ላይ ማስቀመጥ
-    localStorage.setItem(DB_KEY, JSON.stringify(DATA));
-
-    // --- AUTO CLOUD SYNC ---
-    syncWithCloud(); // እዚህ ጋር ራሱ ክላውድ ላይ እንዲጭን ጠራነው
-    // -----------------------
-
-    if(!isEdit) {
-        if((mode==='quarter' && currentTerm < 4) || (mode==='semester' && currentTerm < 2)) {
-            document.getElementById('e_t').value = currentTerm + 1;
-            document.querySelectorAll('.mark-input').forEach(i => i.value = ""); 
-            document.getElementById('e_com').value = "";
-            document.getElementById('m_0').focus();
-        } else {
-            resetFields(); 
-            document.getElementById('e_t').value = 1; 
-            updateNextID(); 
-            document.getElementById('e_m').focus();
+    targetQuarters.forEach(q => {
+        if(st.terms[q]) {
+            sumTotal += st.terms[q].total; sumAvg += st.terms[q].avg; count++;
+            SUBJECTS.forEach(s => subSums[s] += (st.terms[q].marks[s] || 0));
         }
-    } else { resetFields(); updateNextID(); }
-    renderTable();
+    });
+    if(count === 0) return null;
+    SUBJECTS.forEach(s => subSums[s] = subSums[s]/count);
+    return { marks: subSums, total: sumTotal/count, avg: parseFloat((sumAvg/count).toFixed(4)) };
 }
 
-// 2. መረጃ ስታጠፋም ከክላውድ እንዲጠፋ (Updated delRec)
-function delRec(id) { 
-    if(confirm("Delete? / ላጥፋው?")) { 
-        DATA = DATA.filter(d => d.id !== id); 
-        localStorage.setItem(DB_KEY, JSON.stringify(DATA)); 
-        syncWithCloud(); // ሲጠፋም ለውጡን ወደ ክላውድ ይልከዋል
-        renderTable(); 
-    } 
-}
+function renderRowDataCells(st, label, allQAvgs) {
+    let tData = null, rankList = [], conduct = "_", absent = "_", actBtn = "-";
+    
+    if(label === 'Q1' || label === 'Sem 1') { tData = st.terms ? st.terms[1] : null; rankList = allQAvgs[1]; if(tData){conduct=tData.conduct; absent=tData.absent; actBtn=`<button class="act-btn" onclick="editRec('${st.id}', 1)">✏️</button> <button class="act-btn" onclick="deleteQuarterData('${st.id}', 1)">🗑️</button>`;} }
+    else if(label === 'Q2' || label === 'Sem 2') { tData = st.terms ? st.terms[2] : null; rankList = allQAvgs[2]; if(tData){conduct=tData.conduct; absent=tData.absent; actBtn=`<button class="act-btn" onclick="editRec('${st.id}', 2)">✏️</button> <button class="act-btn" onclick="deleteQuarterData('${st.id}', 2)">🗑️</button>`;} }
+    else if(label === 'Q3') { tData = st.terms ? st.terms[3] : null; rankList = allQAvgs[3]; if(tData){conduct=tData.conduct; absent=tData.absent; actBtn=`<button class="act-btn" onclick="editRec('${st.id}', 3)">✏️</button> <button class="act-btn" onclick="deleteQuarterData('${st.id}', 3)">🗑️</button>`;} }
+    else if(label === 'Q4') { tData = st.terms ? st.terms[4] : null; rankList = allQAvgs[4]; if(tData){conduct=tData.conduct; absent=tData.absent; actBtn=`<button class="act-btn" onclick="editRec('${st.id}', 4)">✏️</button> <button class="act-btn" onclick="deleteQuarterData('${st.id}', 4)">🗑️</button>`;} }
+    else if(label === 'SEM 1') { tData = calcTermGroupAvg(st, [1,2]); rankList = allQAvgs.S1; }
+    else if(label === 'SEM 2') { tData = calcTermGroupAvg(st, [3,4]); rankList = allQAvgs.S2; }
+    else if(label === 'ANNUAL') { tData = calcTermGroupAvg(st, [1,2,3,4]); rankList = allQAvgs.AN; actBtn=`<button class="btn" style="background:#0284c7; padding:2px 6px; font-size:10px;" onclick="showCard('${st.no}')">🗂️ CARD</button> <button class="act-btn" style="color:var(--d); font-weight:bold;" onclick="delEntireStudent('${st.id}')">🗑️ ALL</button>`; }
 
-function resetFields() { 
-    document.getElementById('e_id').value = "-1"; 
-    document.getElementById('e_m').value = ""; 
-    document.getElementById('e_a').value = ""; 
-    document.getElementById('e_abs').value = "0"; 
-    document.getElementById('e_com').value = ""; 
-    document.querySelectorAll('.mark-input').forEach(i => i.value = ""); 
-}
+    if(!tData) return `${SUBJECTS.map(()=>`<td style="border:1.5px solid #000;">-</td>`).join('')}<td style="border:1.5px solid #000;">-</td><td style="border:1.5px solid #000;">-</td><td style="border:1.5px solid #000;">-</td><td style="border:1.5px solid #000;">-</td><td style="border:1.5px solid #000;">-</td><td class="btn-modal-hide" style="border:1.5px solid #000;">-</td>`;
 
-function editRec(id) { 
-    const r = DATA.find(d => d.id === id); if(!r) return; 
-    document.getElementById('e_id').value = r.id; document.getElementById('e_n').value = r.no; 
-    document.getElementById('e_m').value = r.name; document.getElementById('e_x').value = r.sex; 
-    document.getElementById('e_a').value = r.age; document.getElementById('e_t').value = r.term; 
-    document.getElementById('e_c').value = r.conduct; document.getElementById('e_abs').value = r.absent; 
-    document.getElementById('e_com').value = r.comment || "";
-    SUBJECTS.forEach((s, i) => { if(document.getElementById(`m_${i}`)) document.getElementById(`m_${i}`).value = r.marks[s] || 0; });
-    if(document.getElementById('inputForm').classList.contains('collapsed')) toggleForm();
+    return `${SUBJECTS.map(s => `<td style="border:1.5px solid #000;">${(tData.marks[s] || 0).toFixed(2)}</td>`).join('')}
+        <td style="font-weight:900; border:1.5px solid #000;">${tData.total.toFixed(2)}</td>
+        <td style="font-weight:900; border:1.5px solid #000;">${tData.avg.toFixed(2)}</td>
+        <td style="background:#fffbeb; font-weight:900; border:1.5px solid #000;">${getRank(tData.avg, rankList)}</td>
+        <td style="border:1.5px solid #000;">${conduct}</td><td style="border:1.5px solid #000;">${absent}</td>
+        <td class="btn-modal-hide" style="border:1.5px solid #000;">${actBtn}</td>`;
 }
-
-function delRec(id) { if(confirm("Delete? / ላጥፋው?")) { DATA = DATA.filter(d => d.id !== id); localStorage.setItem(DB_KEY, JSON.stringify(DATA)); renderTable(); } }
-function exportJSON() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(DATA)], {type: 'application/json'})); a.download = `DIA_Backup.json`; a.click(); }
-function importJSON(e) { const r = new FileReader(); r.onload = (ex) => { DATA = JSON.parse(ex.target.result); localStorage.setItem(DB_KEY, JSON.stringify(DATA)); initApp(); }; r.readAsText(e.target.files[0]); }
-function addSubject() { let s = prompt("Subject Name / የትምህርት ዓይነት:"); if(s) { document.getElementById('h_b').value += "," + s; saveSubs(); } }
-function clearAllData() { if(confirm("ሁሉንም መረጃዎች መሰረዝ ትፈልጋለህ?") && prompt("Password:") === "1234") { DATA = []; localStorage.removeItem(DB_KEY); renderTable(); } }
 
 function buildCardHTML(no, g, s, classData) {
-    const recs = classData.filter(d => d.no == no).sort((a,b) => a.term - b.term);
-    if(recs.length === 0) return "";
+    const recs = classData.filter(d => d.no == no);
+    if(recs.length === 0) return `<div style="padding:10px; color:red; font-weight:bold;">No data found for Student No: ${no}</div>`;
     
-    const school = document.getElementById('h_s').value;
-    const year = document.getElementById('h_y').value;
-    const mode = document.getElementById('h_m').value;
-    const allIds = [...new Set(classData.map(d => d.no))];
-    const totalStudents = allIds.length;
+    const school = document.getElementById('h_s')?.value || "DILIGENT INTELLECTUALS";
+    const year = document.getElementById('h_y')?.value || "";
+    const mode = document.getElementById('h_m')?.value || "quarter";
+    
+    let dynamicSubjects = [...SUBJECTS];
 
-    // አፋን ኦሮሞን ጨምሮ ሁሉንም ትምህርቶች ከዝርዝሩ ያገኛል
-    let currentSubjects = SUBJECTS;
-
-    let tableHtml = `<table class="card-table"><thead><tr><th rowspan="2">SUBJECTS<br>ትምህርቶች</th>`;
+    let tableHtml = `<table class="card-table" style="width:100%; border-collapse:collapse; border: 2.5px solid #000 !important; color: #000; font-size: 10px; font-weight: bold !important;">
+        <thead style="background-color: #eee !important; -webkit-print-color-adjust: exact;">
+            <tr><th rowspan="2" style="border: 1.5px solid #000 !important; padding: 2px; text-align: center; font-weight: bold !important;">SUBJECTS</th>`;
     
     if(mode === 'quarter') {
-        tableHtml += `<th colspan="3">SEM 1</th><th colspan="3">SEM 2</th><th rowspan="2">ANN<br>ዓመታዊ</th></tr><tr><th>Q1</th><th>Q2</th><th>AVG</th><th>Q3</th><th>Q4</th><th>AVG</th></tr></thead><tbody>`;
+        tableHtml += `<th colspan="3" style="border: 1.5px solid #000 !important; font-weight: bold !important;">Semester One</th><th colspan="3" style="border: 1.5px solid #000 !important; font-weight: bold !important;">Semester Two</th><th rowspan="2" style="border: 1.5px solid #000 !important; font-weight: bold !important;">Annual</th></tr>
+                      <tr style="font-size: 8.5px; font-weight: bold !important;"><th style="border: 1.5px solid #000 !important;">Q1</th><th style="border: 1.5px solid #000 !important;">Q2</th><th style="border: 1.5px solid #000 !important;">AVG</th><th style="border: 1.5px solid #000 !important;">Q3</th><th style="border: 1.5px solid #000 !important;">Q4</th><th style="border: 1.5px solid #000 !important;">AVG</th></tr></thead><tbody>`;
     } else {
-        tableHtml += `<th>SEM 1</th><th>SEM 2</th><th style="background:#fefce8">ANNUAL</th></tr></thead><tbody>`;
+        tableHtml += `<th style="border: 1.5px solid #000 !important; font-weight: bold !important;">Semester One</th><th style="border: 1.5px solid #000 !important; font-weight: bold !important;">Semester Two</th><th style="border: 1.5px solid #000 !important; background:#fefce8 !important; font-weight: bold !important;">Annual</th></tr></thead><tbody>`;
     }
-    
-    // --- ትምህርቶች እና ውጤቶች (A.O ጨምሮ) ---
-    currentSubjects.forEach(sub => {
+
+    dynamicSubjects.forEach(sub => {
         const getM = (t) => {
-            const r = recs.find(rx => rx.term == t);
-            return (r && r.marks[sub] !== undefined) ? r.marks[sub] : "-";
+            const studentRec = recs[0];
+            if (studentRec && studentRec.terms && studentRec.terms[t] && studentRec.terms[t].marks) {
+                const mVal = studentRec.terms[t].marks[sub];
+                return (mVal !== undefined && mVal !== "") ? Number(mVal) : "-";
+            }
+            return "-";
         };
 
         if(mode === 'quarter') {
             const q = [1, 2, 3, 4].map(t => getM(t));
-            const s1 = (typeof q[0]==='number' && typeof q[1]==='number') ? ((q[0]+q[1])/2).toFixed(0) : "-";
-            const s2 = (typeof q[2]==='number' && typeof q[3]==='number') ? ((q[2]+q[3])/2).toFixed(0) : "-";
-            const vMarks = recs.map(r => r.marks[sub]).filter(m => typeof m === 'number');
-            const ann = vMarks.length > 0 ? (vMarks.reduce((a, b) => a + b, 0) / vMarks.length).toFixed(0) : "-";
+            const s1 = (typeof q[0]==='number' && typeof q[1]==='number') ? ((q[0]+q[1])/2).toFixed(2) : "-";
+            const s2 = (typeof q[2]==='number' && typeof q[3]==='number') ? ((q[2]+q[3])/2).toFixed(2) : "-";
+            const vMarks = q.filter(m => typeof m === 'number');
+            const ann = vMarks.length > 0 ? (vMarks.reduce((a, b) => a + b, 0) / vMarks.length).toFixed(2) : "-";
 
-            tableHtml += `<tr><td style="text-align:left;padding-left:5px">${sub}</td><td>${q[0]}</td><td>${q[1]}</td><td class="highlight-cell">${s1}</td><td>${q[2]}</td><td>${q[3]}</td><td class="highlight-cell">${s2}</td><td style="background:#fefce8">${ann}</td></tr>`;
+            tableHtml += `<tr style="border: 1.5px solid #000 !important; text-align: center; font-weight: bold !important;">
+                <td style="text-align:center; padding: 2px; border: 1.5px solid #000 !important; font-size: 10px; white-space: normal; font-weight: bold !important;">${sub}</td>
+                <td style="border: 1.5px solid #000 !important; font-weight: bold !important;">${typeof q[0] === 'number' ? q[0].toFixed(2) : q[0]}</td>
+                <td style="border: 1.5px solid #000 !important; font-weight: bold !important;">${typeof q[1] === 'number' ? q[1].toFixed(2) : q[1]}</td>
+                <td style="background-color: #f3f4f6 !important; border: 1.5px solid #000 !important; font-weight: bold !important;">${s1}</td>
+                <td style="border: 1.5px solid #000 !important; font-weight: bold !important;">${typeof q[2] === 'number' ? q[2].toFixed(2) : q[2]}</td>
+                <td style="border: 1.5px solid #000 !important; font-weight: bold !important;">${typeof q[3] === 'number' ? q[3].toFixed(2) : q[3]}</td>
+                <td style="background-color: #f3f4f6 !important; border: 1.5px solid #000 !important; font-weight: bold !important;">${s2}</td>
+                <td style="background-color: #fefce8 !important; border: 2.5px solid #000 !important; font-weight: bold !important;">${ann}</td>
+            </tr>`;
         } else {
-            const s1 = getM(1);
-            const s2 = getM(2);
-            const vMarks = recs.map(r => r.marks[sub]).filter(m => typeof m === 'number');
-            const ann = vMarks.length > 0 ? (vMarks.reduce((a, b) => a + b, 0) / vMarks.length).toFixed(0) : "-";
-            tableHtml += `<tr><td style="text-align:left;padding-left:5px">${sub}</td><td>${s1}</td><td>${s2}</td><td style="background:#fefce8">${ann}</td></tr>`;
+            const s1 = getM(1), s2 = getM(2);
+            const vMarks = [s1, s2].filter(m => typeof m === 'number');
+            const ann = vMarks.length > 0 ? (vMarks.reduce((a, b) => a + b, 0) / vMarks.length).toFixed(2) : "-";
+            tableHtml += `<tr style="border: 1.5px solid #000 !important; text-align: center; font-weight: bold !important;">
+                <td style="text-align:center; padding: 2px; border: 1.5px solid #000 !important; font-weight: bold !important;">${sub}</td>
+                <td style="border: 1.5px solid #000 !important; font-weight: bold !important;">${typeof s1 === 'number' ? s1.toFixed(2) : s1}</td>
+                <td style="border: 1.5px solid #000 !important; font-weight: bold !important;">${typeof s2 === 'number' ? s2.toFixed(2) : s2}</td>
+                <td style="background-color: #fefce8 !important; border: 2.5px solid #000 !important; font-weight: bold !important;">${ann}</td>
+            </tr>`;
         }
     });
 
-    // --- ጠቅላላ መረጃዎች (Total, Avg, Rank) ---
     const metrics = [
-        {label: 'TOTAL', key: 'TOTAL'},
-        {label: 'AVG', key: 'AVG'},
-        {label: 'RANK', key: 'RANK'},
-        {label: 'CONDUCT', key: 'COND'},
-        {label: 'ABSENT', key: 'ABS'},
-        {label: 'COMMENT', key: 'COMM'}
+        {label: 'TOTAL', key: 'TOTAL'}, {label: 'AVG', key: 'AVG'}, {label: 'RANK', key: 'RANK'}, 
+        {label: 'CONDUCT', key: 'COND'}, {label: 'ABSENT', key: 'ABS'}, {label: 'COMMENT', key: 'COMM'}
     ];
 
+    let allQAvgs = {1:[], 2:[], 3:[], 4:[], S1:[], S2:[], AN:[]};
+    classData.forEach(st => {
+        [1,2,3,4].forEach(q => { if(st.terms && st.terms[q]) allQAvgs[q].push(st.terms[q].avg); });
+        let ts1 = calcTermGroupAvg(st, [1,2]), ts2 = calcTermGroupAvg(st, [3,4]), tan = calcTermGroupAvg(st, [1,2,3,4]);
+        if(ts1) allQAvgs.S1.push(ts1.avg); if(ts2) allQAvgs.S2.push(ts2.avg); if(tan) allQAvgs.AN.push(tan.avg);
+    });
+
     metrics.forEach(m => {
-        tableHtml += `<tr><td class="highlight-cell" style="text-align:left;padding-left:5px; font-weight:bold; font-size:10px">${m.label}</td>`;
-        const colTerms = mode === 'quarter' ? [1, 2, 'S1', 3, 4, 'S2'] : [1, 2];
+        tableHtml += `<tr style="border: 1.5px solid #000 !important; text-align: center; font-weight: bold !important;">
+            <td style="text-align:center; padding: 2px; font-size:9px; background-color: #f3f4f6 !important; border: 1.5px solid #000 !important; font-weight: bold !important;">${m.label}</td>`;
         
+        const colTerms = mode === 'quarter' ? [1, 2, 'S1', 3, 4, 'S2'] : [1, 2];
         colTerms.forEach(t => {
             let val = "-";
             const isAvgCol = (t === 'S1' || t === 'S2');
-            if (m.key === 'ABS' && isAvgCol) { val = "-"; } 
-            else {
-                const targetTerms = isAvgCol ? (t === 'S1' ? [1, 2] : [3, 4]) : [t];
-                const sRecs = recs.filter(r => targetTerms.includes(Number(r.term)));
-                if (sRecs.length > 0) {
-                    const currentAvg = sRecs.reduce((sum, r) => sum + r.avg, 0) / sRecs.length;
-                    const currentTotal = sRecs.reduce((sum, r) => sum + r.total, 0) / sRecs.length;
-                    if (m.key === 'TOTAL') val = currentTotal.toFixed(0);
-                    else if (m.key === 'AVG') val = currentAvg.toFixed(1);
-                    else if (m.key === 'ABS') val = sRecs.reduce((sum, r) => sum + (Number(r.absent) || 0), 0);
-                    else if (m.key === 'COND') val = sRecs[sRecs.length-1].conduct;
-                    else if (m.key === 'RANK') {
-                        const allAvgs = allIds.map(id => {
-                            const sr = classData.filter(d => d.no == id && targetTerms.includes(Number(d.term)));
-                            return sr.length > 0 ? (sr.reduce((sum, rx) => sum + rx.avg, 0) / sr.length) : null;
-                        }).filter(v => v !== null);
-                        val = getRank(currentAvg, allAvgs).split('/')[0] + "/" + totalStudents;
-                    }
-                    else if (m.key === 'COMM') val = getAutoComment(currentAvg);
-                }
+            const targetQuarters = isAvgCol ? (t === 'S1' ? [1, 2] : [3, 4]) : [Number(t)];
+            const tData = isAvgCol ? calcTermGroupAvg(recs[0], targetQuarters) : (recs[0].terms ? recs[0].terms[Number(t)] : null);
+            const rankList = allQAvgs[t];
+
+            if (tData) {
+                if (m.key === 'TOTAL') val = tData.total.toFixed(2);
+                else if (m.key === 'AVG') val = tData.avg.toFixed(2);
+                else if (m.key === 'RANK') val = getRank(tData.avg, rankList);
+                else if (m.key === 'COMM') val = getAutoComment(tData.avg);
+                else if (m.key === 'COND') val = isAvgCol ? "" : (tData.conduct || "-");
+                else if (m.key === 'ABS') val = isAvgCol ? "" : (tData.absent || "0");
             }
-            tableHtml += `<td style="font-size:9px">${val}</td>`;
+            tableHtml += `<td style="font-size:9px; border: 1.5px solid #000 !important; font-weight: bold !important;">${val}</td>`;
         });
 
-        // --- Annual ---
-        const annAvg = (recs.reduce((sum, r) => sum + r.avg, 0) / recs.length);
+        const annData = calcTermGroupAvg(recs[0], [1,2,3,4]);
         let annVal = "-";
-        if (m.key === 'ABS') { annVal = "-"; } 
-        else {
-            if (m.key === 'TOTAL') annVal = (recs.reduce((sum, r) => sum + r.total, 0) / recs.length).toFixed(0);
-            else if (m.key === 'AVG') annVal = annAvg.toFixed(1);
-            else if (m.key === 'COND') annVal = recs[recs.length-1].conduct;
-            else if (m.key === 'RANK') {
-                const allAnnAvgs = allIds.map(id => {
-                    const sr = classData.filter(d => d.no == id);
-                    return sr.length > 0 ? (sr.reduce((sum, rx) => sum + rx.avg, 0) / sr.length) : null;
-                }).filter(v => v !== null);
-                annVal = getRank(annAvg, allAnnAvgs).split('/')[0] + "/" + totalStudents;
-            }
-            else if (m.key === 'COMM') annVal = getAutoComment(annAvg);
+        if (annData) {
+            if (m.key === 'TOTAL') annVal = annData.total.toFixed(2);
+            else if (m.key === 'AVG') annVal = annData.avg.toFixed(2);
+            else if (m.key === 'RANK') annVal = getRank(annData.avg, allQAvgs.AN);
+            else if (m.key === 'ABS') annVal = ""; 
+            else if (m.key === 'COND') annVal = ""; 
+            else if (m.key === 'COMM') annVal = getAutoComment(annData.avg);
         }
-        tableHtml += `<td style="background:#fefce8; font-weight:bold; font-size:9px">${annVal}</td></tr>`;
+        tableHtml += `<td style="background:#fefce8 !important; border: 2.5px solid #000 !important; text-align:center; font-size: 8px; font-weight: bold !important;">${annVal}</td></tr>`;
     });
 
     tableHtml += `</tbody></table>`;
 
-    return `
-    <div class="card-content">
-        <div class="main-card-border">
-            <div class="card-header-box">
-                <h2 class="card-title-main">${school}</h2>
-                <div class="year-badge">${year}</div>
+    return `<div class="card-content" style="height: 138mm !important; box-sizing: border-box; padding: 3mm; page-break-inside: avoid; font-weight: bold !important;">
+        <div style="border: 3.5px solid #1e3a8a; height: 100%; display: flex; flex-direction: column; background: #fff; font-weight: bold !important;">
+            <div style="background-color: #eff6ff !important; padding: 6px; text-align: center; border-bottom: 2.5px solid #1e3a8a; -webkit-print-color-adjust: exact; font-weight: bold !important;">
+                <h2 style="margin: 0; color: #1e3a8a; font-size: 1.5em; font-weight: 900 !important; letter-spacing: 0.5px;">${school}</h2>
+                <div style="font-weight: 900 !important; color: #1e3a8a; font-size: 13px; margin-top: 3px; letter-spacing: 0.3px;">STUDENT PROGRESS REPORT CARD (${year})</div>
             </div>
-            <div class="info-grid">
-                <div><b>Name:</b> ${recs[0].name}</div>
-                <div><b>ID:</b> ${no}</div>
-                <div><b>Grade:</b> ${g} - ${s}</div>
-                <div><b>Sex:</b> ${recs[0].sex}</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 6px; font-weight: bold !important; border-bottom: 2.5px solid #1e3a8a; font-size: 11px; color: #000;">
+                <div>Name: <span style="text-decoration: underline; font-weight: bold !important;">${recs[0].name}</span></div>
+                <div>No: <span style="text-decoration: underline; font-weight: bold !important;">${no}</span></div>
+                <div>Grade: <span style="text-decoration: underline; font-weight: bold !important;">${g} - ${s}</span></div>
+                <div>Sex: <span style="text-decoration: underline; font-weight: bold !important;">${recs[0].sex}</span></div>
             </div>
-            ${tableHtml}
-            <div class="signature-area">
-                <div class="sig-line">Teacher's Sig.</div>
-                <div class="sig-line">Director's Sig.</div>
+            <div style="padding: 4px; flex-grow: 1; font-weight: bold !important;">${tableHtml}</div>
+            <div style="padding: 8px; display: flex; justify-content: space-between; font-weight: bold !important; font-size: 10px; margin-top: auto; color: #000;">
+                <div style="text-align: center; width: 45%; border-top: 2px solid #000; padding-top: 2px; font-weight: bold !important;">Teacher's Signature</div>
+                <div style="text-align: center; width: 45%; border-top: 2px solid #000; padding-top: 2px; font-weight: bold !important;">Director's Signature</div>
             </div>
         </div>
     </div>`;
