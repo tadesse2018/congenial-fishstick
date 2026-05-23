@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>DIA Grade Pro - Official Roster</title>
 
 <!-- PWA Settings -->
@@ -377,7 +378,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
     window.firebaseAuth = auth;
 
-// 🔄 1) LOGIN FUNCTION (የተስተካከለ - የመረጡትን ክፍል ብቻ የሚከፍት)
+//// 🔄 1) LOGIN FUNCTION (የተስተካከለ - የመረጡትን ክፍል ብቻ የሚከፍት)
     window.checkLogin = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
         const password = document.getElementById('passInput')?.value; 
@@ -393,7 +394,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
             const user = userCredential.user;
 
-            // ከዳታቤዝ ላይ መምህሩ የተመዘገበበትን ትክክለኛ ክፍል እና ሴክሽን ማንበብ
+            // ከዳታቤዝ ላይ መምህሩ የተመዘገበበትን ትክክለኛ ክፍል ማምጣት
             const snapshot = await get(ref(db, `users_profile/${user.uid}`));
             
             if (snapshot.exists()) {
@@ -404,15 +405,21 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
                 document.getElementById('view_g').disabled = true; 
                 document.getElementById('view_s').value = profile.assignedSection;
                 document.getElementById('view_s').disabled = true; 
+
+                // 🔄 ዋናው ማስተካከያ፦ አፑ ወደ ሌላ ክፍል እንዳይቀይረው እዚህ ጋ ክፍልና ሴክሽኑን እናሳውቀዋለን
+                window.currentGrade = profile.assignedGrade;
+                window.currentSection = profile.assignedSection;
             } else {
-                alert("የክፍል መረጃዎ በዳታቤዝ ላይ አልተገኘም! እባክዎ እንደ አዲስ ይመዝገቡ።");
+                alert("የክፍል መረጃዎ በዳታቤዝ ላይ አልተገኘም!");
                 return;
             }
 
             document.getElementById('login').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
+            
+            // የራሱን ክፍል ብቻ እንዲያነብ መመሪያ መስጠት
             if (typeof initApp === "function") initApp(); 
-            window.listenToCurrentClassCloud(); 
+            if (typeof window.listenToCurrentClassCloud === "function") window.listenToCurrentClassCloud(); 
         } catch (error) {
             alert("የመግቢያ ስህተት፦ የስልክ ቁጥሩ ወይም የክፍል ቁልፉ አልተገኘም!");
         }
@@ -447,7 +454,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, classPassword);
             const user = userCredential.user;
 
-            // 📂 የመረጡትን ክፍል (ለምሳሌ Grade 1 ወይም Grade 2) በንጽህና ዳታቤዝ ላይ ማስቀመጥ
+            // 📂 የመረጡትን ክፍል በንጽህና ዳታቤዝ ላይ ማስቀመጥ
             await set(ref(db, `users_profile/${user.uid}`), {
                 assignedGrade: selectedGrade,
                 assignedSection: selectedSection
@@ -460,10 +467,15 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             document.getElementById('view_s').value = selectedSection;
             document.getElementById('view_s').disabled = true; 
 
+            // 🔄 አፑ በስህተት ወደ ሌላ ክፍል እንዳይሄድ እዚህም እንቆልፈዋለን
+            window.currentGrade = selectedGrade;
+            window.currentSection = selectedSection;
+
             document.getElementById('login').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
+            
             if (typeof initApp === "function") initApp(); 
-            window.listenToCurrentClassCloud(); 
+            if (typeof window.listenToCurrentClassCloud === "function") window.listenToCurrentClassCloud(); 
         } catch (error) {
             alert("የምዝገባ ስህተት፦ " + error.message);
         }
@@ -592,8 +604,15 @@ let SUBJECTS = [];
 function initApp() {
     const savedSubs = localStorage.getItem(SUB_KEY);
     if(savedSubs) document.getElementById('h_b').value = savedSubs;
-    const s = JSON.parse(localStorage.getItem(STATE_KEY));
-    if(s) { document.getElementById('view_g').value = s.g; document.getElementById('view_s').value = s.s; }
+
+    // 🔄 ዋናው ማስተካከያ፦ መነሻ ክፍሉን ሁልጊዜ ከመምህሩ መግቢያ (window.currentGrade) መውሰድ
+    // በስህተት ከ localstorage አሮጌ ዳታ እንዳይወስድ ተደርጓል
+    const currentGrade = window.currentGrade || document.getElementById('view_g')?.value || "Grade_1";
+    const currentSection = window.currentSection || document.getElementById('view_s')?.value || "A";
+
+    document.getElementById('view_g').value = currentGrade;
+    document.getElementById('view_s').value = currentSection;
+
     SUBJECTS = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x);
     const mode = document.getElementById('h_m').value;
     
@@ -605,8 +624,13 @@ function initApp() {
         <div class="fld"><label>${s}</label><input type="number" class="mark-input" data-subj="${s}" id="m_${i}" 
         style="width:40px;text-align:center" oninput="autoJump(${i})" onkeydown="handleEnter(event, ${i})"></div>
     `).join('');
+    
     updateNextID(); 
-    renderTable();
+
+    // 📂 የተመረጠውን ክፍል ዳታ ብቻ ለይቶ እንዲያመጣ መመሪያ መስጠት
+    if (typeof renderTable === "function") {
+        renderTable(currentGrade, currentSection);
+    }
 }
 
 function getAutoComment(avg) {
