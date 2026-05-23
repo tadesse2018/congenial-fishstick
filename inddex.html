@@ -377,19 +377,13 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
     window.firebaseAuth = auth;
 
-// 🔄 1) LOGIN FUNCTION
-// 🔄 LOGIN - ስህተት እንዳይፈጥር ተስተካክሎ የተሰራ
-// 🔄 LOGIN - ስህተት እንዳይፈጥር ተስተካክሎ የተሰራ
+// 🔄 1) LOGIN FUNCTION (የተስተካከለ - የመረጡትን ክፍል ብቻ የሚከፍት)
     window.checkLogin = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
-        const password = document.getElementById('passInput')?.value; // የክፍሉ ቁልፍ
-
-        // በስክሪኑ ላይ መምህሩ አሁን የመረጣቸውን መረጃዎች አስቀድሞ መያዝ (ባዶ ቢሆን እንኳ እንዲሰራ)
-        const selectedGrade = document.getElementById('signUpGrade')?.value;
-        const selectedSection = document.getElementById('signUpSection')?.value; 
+        const password = document.getElementById('passInput')?.value; 
 
         if(!phone || !password) {
-            alert("እባክዎ ስልክ ቁጥር እና የይለፍ ቃል በትክክል ይሙሉ!");
+            alert("እባክዎ ስልክ ቁጥር እና የክፍል ቁልፍ በትክክል ይሙሉ!");
             return;
         }
 
@@ -399,64 +393,42 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
             const user = userCredential.user;
 
-            let finalGrade = selectedGrade;
-            let finalSection = selectedSection;
-
-            // በክላውድ ላይ መረጃው ካለ ማረጋገጥ
-            try {
-                const snapshot = await get(ref(db, `users_profile/${user.uid}`));
-                if (snapshot.exists()) {
-                    const profile = snapshot.val();
-                    finalGrade = profile.assignedGrade || selectedGrade;
-                    finalSection = profile.assignedSection || selectedSection;
-                } else {
-                    // ዳታቤዙ ላይ ከሌለ አሁኑኑ መረጃውን መልሶ መጻፍ (ደህንነቱን ለመጠበቅ)
-                    await set(ref(db, `users_profile/${user.uid}`), {
-                        assignedGrade: selectedGrade,
-                        assignedSection: selectedSection
-                    });
-                }
-            } catch (dbError) {
-                console.log("Database read bypassed, using screen values.");
-            }
+            // ከዳታቤዝ ላይ መምህሩ የተመዘገበበትን ትክክለኛ ክፍል እና ሴክሽን ማንበብ
+            const snapshot = await get(ref(db, `users_profile/${user.uid}`));
+            
+            if (snapshot.exists()) {
+                const profile = snapshot.val();
                 
-            // 🔒 በገቡበት ክፍል እና ሴክሽን ላይ መቆለፍ
-            document.getElementById('view_g').value = finalGrade;
-            document.getElementById('view_g').disabled = true; 
-            document.getElementById('view_s').value = finalSection;
-            document.getElementById('view_s').disabled = true; 
+                // 🔒 በትክክለኛው ክፍል እና ሴክሽን ላይ መቆለፍ
+                document.getElementById('view_g').value = profile.assignedGrade;
+                document.getElementById('view_g').disabled = true; 
+                document.getElementById('view_s').value = profile.assignedSection;
+                document.getElementById('view_s').disabled = true; 
+            } else {
+                alert("የክፍል መረጃዎ በዳታቤዝ ላይ አልተገኘም! እባክዎ እንደ አዲስ ይመዝገቡ።");
+                return;
+            }
 
-            // አፑን መክፈት
             document.getElementById('login').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
             if (typeof initApp === "function") initApp(); 
             window.listenToCurrentClassCloud(); 
         } catch (error) {
-            alert("የመግቢያ ስህተት፦ የስልክ ቁጥሩ ወይም የይለፍ ቃሉ አልተገኘም!");
+            alert("የመግቢያ ስህተት፦ የስልክ ቁጥሩ ወይም የክፍል ቁልፉ አልተገኘም!");
         }
     };
 
-    // 🟢 2) SIGN UP FUNCTION
+    // 🟢 2) SIGN UP FUNCTION (የተስተካከለ - እያንዳንዱን ክፍል ለየብቻ በትክክል የሚመዘግብ)
     window.handleSignUp = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
-        const classPassword = document.getElementById('passInput')?.value; 
+        const classPassword = document.getElementById('passInput')?.value.trim().toLowerCase(); 
         const selectedGrade = document.getElementById('signUpGrade')?.value;
         const selectedSection = document.getElementById('signUpSection')?.value; 
 
-// 🔐 ከ 6 አሃዝ እንዳያንስ የተስተካከሉ የክፍል ሚስጥራዊ ቁልፎች (100% Firebase ይቀበላቸዋል)
         const classKeys = {
-            "Grade_1": "dia1111", // አሁን 7 አሃዝ ሆነ
-            "Grade_2": "dia2222",
-            "Grade_3": "dia3333",
-            "Grade_4": "dia4444",
-            "Grade_5": "dia5555",
-            "Grade_6": "dia6666",
-            "Grade_7": "dia7777",
-            "Grade_8": "dia8888",
-            "Grade_9": "dia9999",
-            "Grade_10": "dia1010",
-            "Grade_11": "dia1111",
-            "Grade_12": "dia1212"
+            "Grade_1": "dia1111", "Grade_2": "dia2222", "Grade_3": "dia3333", "Grade_4": "dia4444",
+            "Grade_5": "dia5555", "Grade_6": "dia6666", "Grade_7": "dia7777", "Grade_8": "dia8888",
+            "Grade_9": "dia9999", "Grade_10": "dia1010", "Grade_11": "dia1111", "Grade_12": "dia1212"
         };
 
         if(!phone || !classPassword) {
@@ -475,12 +447,13 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, classPassword);
             const user = userCredential.user;
 
+            // 📂 የመረጡትን ክፍል (ለምሳሌ Grade 1 ወይም Grade 2) በንጽህና ዳታቤዝ ላይ ማስቀመጥ
             await set(ref(db, `users_profile/${user.uid}`), {
                 assignedGrade: selectedGrade,
                 assignedSection: selectedSection
             });
 
-            alert("አካውንትዎ በተሳካ ሁኔታ ተፈጥሯል! ለቀጣይ መግቢያ ይህንን የክፍል ቁልፍ ይጠቀሙ።");
+            alert("አካውንትዎ ለ " + selectedGrade + " በተሳካ ሁኔታ ተፈጥሯል!");
             
             document.getElementById('view_g').value = selectedGrade;
             document.getElementById('view_g').disabled = true; 
