@@ -247,8 +247,13 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 <div id="login">
     <div class="login-box">
         <h2>DIA ROSTER APP (ሮስተር)</h2>
-        <input type="password" id="passInput" placeholder="Password (1234)">
-        <button class="login-btn" onclick="checkLogin()">LOGIN / ግባ</button>
+        <input type="tel" id="phoneInput" placeholder="የስልክ ቁጥር (Phone Number)">
+        <input type="password" id="passInput" placeholder="የይለፍ ቃል (Password)">
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="login-btn" onclick="checkLogin()" style="flex: 1;">LOGIN / ግባ</button>
+            <button class="login-btn" onclick="handleSignUp()" style="flex: 1; background-color: #28a745;">SIGN UP / አዲስ አካውንት</button>
+        </div>
     </div>
 </div>
 
@@ -324,6 +329,8 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    // 🔥 የተስተካከለ የ Auth imports
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCIQLl6EGGscg35mSpFvhhGYSU84IANNxQ",
@@ -337,19 +344,81 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app); 
 
-    // 🔄 ከተመረጠው ክፍል ላይ ዳታውን ቀጥታ ኦንላይን ሰምቶ ሪፍሬሽ ማድረጊያ
+    window.firebaseAuth = auth;
+
+    // 🔄 LOGIN / ግባ የሚለው በተን ሲጫን የሚሰራ
+    window.checkLogin = async function() {
+        const phone = document.getElementById('phoneInput')?.value.trim();
+        const password = document.getElementById('passInput')?.value;
+
+        if(!phone || !password) {
+            alert("እባክዎ ስልክ ቁጥር እና የይለፍ ቃል በትክክል ይሙሉ!");
+            return;
+        }
+
+        const fakeEmail = `${phone}@school.com`;
+
+        try {
+            await signInWithEmailAndPassword(auth, fakeEmail, password);
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('app').style.display = 'flex';
+            if (typeof initApp === "function") initApp(); 
+            window.listenToCurrentClassCloud(); 
+        } catch (error) {
+            alert("የመግቢያ ስህተት፦ የስልክ ቁጥሩ ወይም የይለፍ ቃሉ አልተገኘም!");
+            console.error(error.message);
+        }
+    };
+
+    // 🟢 SIGN UP / አዲስ አካውንት የሚለው በተን ሲጫን የሚሰራው አዲሱ ፈንክሽን
+    window.handleSignUp = async function() {
+        const phone = document.getElementById('phoneInput')?.value.trim();
+        const password = document.getElementById('passInput')?.value;
+
+        if(!phone || !password) {
+            alert("እባክዎ አካውንት ለመፍጠር ስልክ ቁጥር እና የይለፍ ቃል ይሙሉ!");
+            return;
+        }
+        if(password.length < 6) {
+            alert("የይለፍ ቃል ቢያንስ 6 አሃዝ ወይም ፊደል መሆን አለበት!");
+            return;
+        }
+
+        const fakeEmail = `${phone}@school.com`;
+
+        try {
+            await createUserWithEmailAndPassword(auth, fakeEmail, password);
+            alert("አካውንትዎ በተሳካ ሁኔታ ተፈጥሯል! አፕሊኬሽኑ አሁን ይከፈታል።");
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('app').style.display = 'flex';
+            if (typeof initApp === "function") initApp(); 
+            window.listenToCurrentClassCloud(); 
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                alert("ይህ ስልክ ቁጥር አስቀድሞ ተመዝግቧል! በ'LOGIN' በተን ይግቡ።");
+            } else {
+                alert("አካውንት መፍጠር አልተቻለም፦ " + error.message);
+            }
+        }
+    };
+
+    // 🔄 ኦንላይን ሰምቶ ሪፍሬሽ ማድረጊያ
     window.listenToCurrentClassCloud = function() {
         const status = document.getElementById('cloudStatus');
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
         const vs = document.getElementById('view_s').value.trim();
+        const currentUser = auth.currentUser;
+
+        if (!currentUser) return;
 
         if (status) {
             status.innerText = "Connecting Cloud...";
             status.className = "sync-badge";
         }
 
-        const classRef = ref(db, `rosters/${vg}/${vs}`);
+        const classRef = ref(db, `rosters/${currentUser.uid}/${vg}/${vs}`);
 
         if (typeof window.unsubscribeCloud === "function") {
             window.unsubscribeCloud();
@@ -357,27 +426,20 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
         window.unsubscribeCloud = onValue(classRef, (snapshot) => {
             if (snapshot.exists()) {
-                const cloudData = snapshot.val() || [];
-                DATA = cloudData;
+                DATA = snapshot.val() || [];
                 localStorage.setItem('_DIA_DATA_V10_DUAL', JSON.stringify(DATA));
-                
-                if (typeof renderTable === "function") {
-                    renderTable();
-                }
+                if (typeof renderTable === "function") renderTable();
 
                 if (status) {
                     status.innerText = "Cloud: Connected (Live)";
                     status.className = "sync-badge sync-on";
                 }
             } else {
-                // ክላውዱ ላይ ባዶ ከሆነ ስልኩ ላይ ያለውን ዳታ በራሱ እንዳያጠፋው መጀመሪያ ወደ ክላውድ እንጭነዋለን
                 if (DATA && DATA.length > 0) {
                     window.syncWithCloud();
                 } else {
                     DATA = [];
-                    if (typeof renderTable === "function") {
-                        renderTable();
-                    }
+                    if (typeof renderTable === "function") renderTable();
                 }
                 if (status) {
                     status.innerText = "Cloud: Ready (New)";
@@ -386,25 +448,16 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             }
         }, (err) => {
             console.error("Cloud Error: ", err);
-            if (status) {
-                status.innerText = "Cloud Sync Offline";
-                status.className = "sync-badge sync-off";
-            }
         });
     };
 
-    // 🚀 ሲስተሙ ገና ሲከፈት እና ክፍሎች ሲቀየሩ እንዲሰራ ማስነሻ
+    // 🚀 መተግበሪያው ሲነሳ
     document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
-            window.listenToCurrentClassCloud();
-            
-            // 🔥 እጅግ ወሳኝ ማሻሻያ፦ የድሮውን saveData ፈንክሽን ሳንነካ እዚህ ላይ እንጠልፈዋለን
             if (typeof window.saveData === "function") {
                 const originalSaveData = window.saveData;
                 window.saveData = function(...args) {
-                    // 1. መጀመሪያ በስልኩ ላይ መረጃውን ያስቀምጣል
                     originalSaveData.apply(this, args);
-                    // 2. ወዲያውኑ ሳንጠብቅ በራሱ ጊዜ ወደ Firebase ኦንላይን ቀጥታ ይጭነዋል
                     window.syncWithCloud();
                 };
             }
@@ -412,47 +465,47 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
         const gradeSelect = document.getElementById('view_g');
         const secSelect = document.getElementById('view_s');
-
         if (gradeSelect) gradeSelect.addEventListener('change', window.listenToCurrentClassCloud);
         if (secSelect) secSelect.addEventListener('change', window.listenToCurrentClassCloud);
     });
 
-    // ⬆️ ወደ ክላውድ መጫኛ (በስተጀርባ በራሱ የሚሰራ)
+    // ⬆️ ወደ ክላውድ መጫኛ
     window.syncWithCloud = async function() {
         const status = document.getElementById('cloudStatus');
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
         const vs = document.getElementById('view_s').value.trim();
+        const currentUser = auth.currentUser;
         
-        if(status) status.innerText = "Saving Online...";
+        if (!currentUser) return;
+        if (status) status.innerText = "Saving Online...";
         
         try {
-            await set(ref(db, `rosters/${vg}/${vs}`), DATA);
+            await set(ref(db, `rosters/${currentUser.uid}/${vg}/${vs}`), DATA);
             if(status) {
                 status.innerText = "Cloud: Saved & Synchronized";
                 status.className = "sync-badge sync-on";
             }
         } catch (err) {
-            if(status) {
-                status.innerText = "Sync Failed";
-                status.className = "sync-badge sync-off";
-            }
             console.error("Auto Sync Error: " + err.message);
         }
     };
 
-    // ⬇️ ከክላውድ ማውረጃ (እንደነበረው ሰላማዊ ነው)
+    // ⬇️ ከክላውድ ማውረጃ
     window.pullFromCloud = async function() {
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
         const vs = document.getElementById('view_s').value.trim();
         const dbRef = ref(db);
+        const currentUser = auth.currentUser;
+        
+        if (!currentUser) return;
         
         try {
-            const snapshot = await get(child(dbRef, `rosters/${vg}/${vs}`));
+            const snapshot = await get(child(dbRef, `rosters/${currentUser.uid}/${vg}/${vs}`));
             if (snapshot.exists()) {
                 if(confirm("ክላውድ ላይ ያለውን ዳታ አውርጄ አሁን ያለውን ልተካው?")) {
                     DATA = snapshot.val() || [];
                     localStorage.setItem('_DIA_DATA_V10_DUAL', JSON.stringify(DATA));
-                    renderTable();
+                    if (typeof renderTable === "function") renderTable();
                     alert("ዳታው ከክላውድ ወርዷል!");
                 }
             } else {
@@ -470,14 +523,6 @@ const STATE_KEY = '_DIA_STATE';
 
 let DATA = JSON.parse(localStorage.getItem(DB_KEY)) || [];
 let SUBJECTS = [];
-
-function checkLogin() {
-    if(document.getElementById('passInput').value === "1234") {
-        document.getElementById('login').style.display='none';
-        document.getElementById('app').style.display='flex';
-        initApp();
-    } else alert("Wrong Password! / የተሳሳተ የይለፍ ቃል!");
-}
 
 function initApp() {
     const savedSubs = localStorage.getItem(SUB_KEY);
