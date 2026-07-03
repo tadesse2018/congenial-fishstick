@@ -19,8 +19,16 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 .roster-print-header { display: none; text-align: center; border-bottom: 2px double #000; margin-bottom: 15px; padding: 10px; background: #fff; }
 
 /* ==========================================================================
-   1. በሲስተሙ ስክሪን ላይ (App View) - የሮስተር ሄደር የውስጥ መስመሮችን ነጭ ማድረግ
+   * ሮስተር እና ካርድ ላይ ያሉትን ሁሉንም ጽሑፎች ደማቅ (Bold) ማድረጊያ *
    ========================================================================== */
+#mainTable, #mainTable *, 
+.card-content, .card-content *, 
+#rosterHeader, #rosterHeader *,
+#rosterFooterContainer, #rosterFooterContainer * {
+    font-weight: bold !important;
+}
+
+/* 1. በሲስተሙ ስክሪን ላይ (App View) - የሮስተር ሄደር የውስጥ መስመሮችን ነጭ ማድረግ */
 .roster-table-header-row, 
 #mainTable tbody[style*="background-color: #eee"], 
 #mainTable tbody:first-child {
@@ -32,27 +40,21 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
     background-color: #000000 !important;
     color: #ffffff !important;
     font-weight: 900 !important;
-    /* የውስጥ መስመሮቹ ከጥቁሩ ባግራውንድ ጋር እንዳይዋሃዱ ነጭ (White) ተደረጉ */
     border: 2px solid #ffffff !important; 
     padding: 8px 4px !important;
 }
 
-/* ==========================================================================
-   2. የህትመት ማስተካከያ (Print View) - ለስልክ ፕሪንተር ፍጹም የተስተካከለ
-   ========================================================================== */
+/* 2. የህትመት ማስተካከያ (Print View) */
 @media print {
-    /* ለስልክ ፕሪንተር ማርጅኑን ሙሉ በሙሉ ማጥፋት (2 ካርድ በአንድ ገጽ እንዲወጣ) */
     @page { 
         size: A4 portrait; 
         margin: 0mm !important; 
     }
 
-    /* የማይፈለጉ ነገሮችን ማጥፊያ */
     .btn-modal-hide, .app-header, .top, .bar, .stats-bar, .btn, #login, .no-print, .sync-badge { 
         display: none !important; 
     }
 
-    /* የገጽ አቀማመጥ ማስተካከያ */
     body, html { 
         background: white !important; 
         overflow: visible !important; 
@@ -73,7 +75,6 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         margin: 0 !important; 
     }
 
-    /* --- ለሮስተር ህትመት (Roster Printing) --- */
     body.printing-roster {
         padding: 10mm 5mm !important; 
     }
@@ -90,12 +91,11 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         margin-bottom: 25px; 
     }
 
-    /* በህትመት preview ላይ የሄደሩ መስመሮች ነጭ ሆነው እንዲለያዩ ማስገደጃ */
     body.printing-roster .roster-table-header-row th {
         background-color: #000000 !important; 
         color: #ffffff !important; 
         font-weight: 900 !important; 
-        border: 2px solid #ffffff !important; /* ነጭ መስመር ለህትመት */
+        border: 2px solid #ffffff !important; 
         -webkit-print-color-adjust: exact; 
         print-color-adjust: exact;
         padding: 6px 4px !important;
@@ -116,7 +116,6 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         break-inside: avoid !important;
     }
 
-    /* የሮስተር ስታቲስቲክስ እና ፊርማ በአንድ ረድፍ ዳር እስከ ዳር */
     .roster-footer-row {
         display: flex !important;
         justify-content: space-between !important;
@@ -130,7 +129,7 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
     .roster-stats-container th {
         background-color: #000000 !important;
         color: #ffffff !important;
-        border: 2px solid #ffffff !important; /* የስታቲስቲክስ ሄደርም መስመሩ ነጭ እንዲሆን */
+        border: 2px solid #ffffff !important; 
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
@@ -155,7 +154,6 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         color: #000 !important; 
     }
 
-    /* --- ለካርድ ህትመት (Card Printing) --- */
     body.printing-cards #tableContainer { 
         display: none !important; 
     }
@@ -358,8 +356,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    // 🔥 የተስተካከለ የ Auth imports
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
@@ -378,7 +375,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
     window.firebaseAuth = auth;
 
-//// 🔄 1) LOGIN FUNCTION (የተስተካከለ - የመረጡትን ክፍል ብቻ የሚከፍት)
+    // 🔄 1) LOGIN FUNCTION
     window.checkLogin = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
         const password = document.getElementById('passInput')?.value; 
@@ -394,19 +391,16 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
             const user = userCredential.user;
 
-            // ከዳታቤዝ ላይ መምህሩ የተመዘገበበትን ትክክለኛ ክፍል ማምጣት
             const snapshot = await get(ref(db, `users_profile/${user.uid}`));
             
             if (snapshot.exists()) {
                 const profile = snapshot.val();
                 
-                // 🔒 በትክክለኛው ክፍል እና ሴክሽን ላይ መቆለፍ
                 document.getElementById('view_g').value = profile.assignedGrade;
                 document.getElementById('view_g').disabled = true; 
                 document.getElementById('view_s').value = profile.assignedSection;
                 document.getElementById('view_s').disabled = true; 
 
-                // 🔄 ዋናው ማስተካከያ፦ አፑ ወደ ሌላ ክፍል እንዳይቀይረው እዚህ ጋ ክፍልና ሴክሽኑን እናሳውቀዋለን
                 window.currentGrade = profile.assignedGrade;
                 window.currentSection = profile.assignedSection;
             } else {
@@ -417,7 +411,6 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             document.getElementById('login').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
             
-            // የራሱን ክፍል ብቻ እንዲያነብ መመሪያ መስጠት
             if (typeof initApp === "function") initApp(); 
             if (typeof window.listenToCurrentClassCloud === "function") window.listenToCurrentClassCloud(); 
         } catch (error) {
@@ -425,7 +418,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         }
     };
 
-    // 🟢 2) SIGN UP FUNCTION (የተስተካከለ - እያንዳንዱን ክፍል ለየብቻ በትክክል የሚመዘግብ)
+    // 🟢 2) SIGN UP FUNCTION
     window.handleSignUp = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
         const classPassword = document.getElementById('passInput')?.value.trim().toLowerCase(); 
@@ -454,7 +447,6 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, classPassword);
             const user = userCredential.user;
 
-            // 📂 የመረጡትን ክፍል በንጽህና ዳታቤዝ ላይ ማስቀመጥ
             await set(ref(db, `users_profile/${user.uid}`), {
                 assignedGrade: selectedGrade,
                 assignedSection: selectedSection
@@ -467,7 +459,6 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             document.getElementById('view_s').value = selectedSection;
             document.getElementById('view_s').disabled = true; 
 
-            // 🔄 አፑ በስህተት ወደ ሌላ ክፍል እንዳይሄድ እዚህም እንቆልፈዋለን
             window.currentGrade = selectedGrade;
             window.currentSection = selectedSection;
 
@@ -481,8 +472,9 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         }
     };
 
-    // 🔄 ኦንላይን ሰምቶ ሪፍሬሽ ማድረጊያ
-    window.listenToCurrentClassCloud = function() {
+    // 🔄 3) HIGHLY RELIABLE OFFLINE-FIRST CLOUD SYNC
+    // በዌብሶኬት ፈንታ በአንድ የ Get ትዕዛዝ ብቻ መረጃ በመሳብ ኔትወርክ ላይ መዘግየትን ሙሉ በሙሉ ያስወግዳል
+    window.listenToCurrentClassCloud = async function() {
         const status = document.getElementById('cloudStatus');
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
         const vs = document.getElementById('view_s').value.trim();
@@ -497,11 +489,8 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
         const classRef = ref(db, `rosters/${currentUser.uid}/${vg}/${vs}`);
 
-        if (typeof window.unsubscribeCloud === "function") {
-            window.unsubscribeCloud();
-        }
-
-        window.unsubscribeCloud = onValue(classRef, (snapshot) => {
+        try {
+            const snapshot = await get(classRef);
             if (snapshot.exists()) {
                 DATA = snapshot.val() || [];
                 localStorage.setItem('_DIA_DATA_V10_DUAL', JSON.stringify(DATA));
@@ -523,9 +512,15 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
                     status.className = "sync-badge sync-on";
                 }
             }
-        }, (err) => {
-            console.error("Cloud Error: ", err);
-        });
+        } catch (err) {
+            console.error("Cloud Access Error (Offline Mode Fallback active): ", err);
+            // የኢንተርኔት ግንኙነት ባይኖርም ከስልክ ማከማቻ የተነበበውን ዳታ ያሳያል
+            if (typeof renderTable === "function") renderTable();
+            if (status) {
+                status.innerText = "Cloud: Offline (Local Mode)";
+                status.className = "sync-badge sync-off";
+            }
+        }
     };
 
     // 🚀 መተግበሪያው ሲነሳ
@@ -546,7 +541,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         if (secSelect) secSelect.addEventListener('change', window.listenToCurrentClassCloud);
     });
 
-    // ⬆️ ወደ ክላውድ መጫኛ
+    // ⬆️ ወደ ክላውድ መጫኛ (በጀርባ ያለ መዘግየት ይሰራል)
     window.syncWithCloud = async function() {
         const status = document.getElementById('cloudStatus');
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
@@ -564,6 +559,10 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             }
         } catch (err) {
             console.error("Auto Sync Error: " + err.message);
+            if(status) {
+                status.innerText = "Cloud: Offline (Saved Locally)";
+                status.className = "sync-badge sync-off";
+            }
         }
     };
 
@@ -605,8 +604,6 @@ function initApp() {
     const savedSubs = localStorage.getItem(SUB_KEY);
     if(savedSubs) document.getElementById('h_b').value = savedSubs;
 
-    // 🔄 ዋናው ማስተካከያ፦ መነሻ ክፍሉን ሁልጊዜ ከመምህሩ መግቢያ (window.currentGrade) መውሰድ
-    // በስህተት ከ localstorage አሮጌ ዳታ እንዳይወስድ ተደርጓል
     const currentGrade = window.currentGrade || document.getElementById('view_g')?.value || "Grade_1";
     const currentSection = window.currentSection || document.getElementById('view_s')?.value || "A";
 
@@ -627,7 +624,6 @@ function initApp() {
     
     updateNextID(); 
 
-    // 📂 የተመረጠውን ክፍል ዳታ ብቻ ለይቶ እንዲያመጣ መመሪያ መስጠት
     if (typeof renderTable === "function") {
         renderTable(currentGrade, currentSection);
     }
@@ -727,24 +723,23 @@ function renderTable() {
         </div>
     `;
 
-    // ማስተካከያ፦ thead ን ወደ tbody ቀይረነዋል (በመጀመሪያው ገጽ ብቻ እንዲወጣ)
-    let html = `<tbody class="roster-table-header-row" style="background-color: #eee !important; color: #000 !important; font-weight: 900 !important;">
+    let html = `<tbody class="roster-table-header-row" style="background-color: #000000 !important; color: #ffffff !important; font-weight: 900 !important;">
         <tr style="border: 2px solid #000;">
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">No.</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Name / ስም</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Sex</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Age</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Term</th>
-            <th colspan="${SUBJECTS.length}" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">SUBJECTS / ትምህርቶች</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Total</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Avg</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Rank</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Cond.</th>
-            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Abs.</th>
-            <th rowspan="2" class="btn-modal-hide" style="border: 2px solid #000; font-weight: 900; background-color: #eee;">Act</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">No.</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Name / ስም</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Sex</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Age</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Term</th>
+            <th colspan="${SUBJECTS.length}" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">SUBJECTS / ትምህርቶች</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Total</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Avg</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Rank</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Cond.</th>
+            <th rowspan="2" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Abs.</th>
+            <th rowspan="2" class="btn-modal-hide" style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">Act</th>
         </tr>
         <tr style="border: 2px solid #000;">
-            ${SUBJECTS.map(s=>`<th style="border: 2px solid #000; font-weight: 900; background-color: #eee;">${s}</th>`).join('')}
+            ${SUBJECTS.map(s=>`<th style="border: 2px solid #000; font-weight: 900; background-color: #000000 !important; color: #ffffff !important;">${s}</th>`).join('')}
         </tr>
     </tbody>`;
     
@@ -828,6 +823,7 @@ function renderTable() {
     }
     footerDiv.innerHTML = footerHtml;
 }
+
 function renderSubRow(no, g, s, terms, label, cData, isAnn=false) {
     const recs = cData.filter(d => d.no == no && terms.includes(Number(d.term)));
     if(recs.length === 0) return "";
@@ -841,14 +837,30 @@ function renderSubRow(no, g, s, terms, label, cData, isAnn=false) {
         return sr.length > 0 ? parseFloat((sr.reduce((sum, r) => sum + r.avg, 0) / sr.length).toFixed(2)) : null;
     }).filter(v => v !== null);
     
-    return `<tr style="background:${isAnn?'#fefce8':'#f1f5f9'}; font-weight:bold">
-        <td>${label}</td>
-        ${SUBJECTS.map(sub => `<td>${(recs.reduce((u,r)=>u+(r.marks[sub]||0),0)/recs.length).toFixed(2)}</td>`).join('')}
-        <td>${totalSum.toFixed(2)}</td>
-        <td>${avg.toFixed(2)}</td>
-        <td>${getRank(avg, groupAvgs)}</td>
-        <td>_ _</td><td>_ _</td>
-        <td class="btn-modal-hide">${isAnn?`<button onclick="showCard('${no}','${g}','${s}')">CARD</button>`:'-'}</td>
+    let rowStyle = "";
+    if (isAnn) {
+        rowStyle = "background-color: #fef3c7 !important; color: #92400e !important; font-weight: 900 !important;";
+    } else if (label.toUpperCase().includes("SEM 1")) {
+        rowStyle = "background-color: #e0f2fe !important; color: #0369a1 !important; font-weight: 900 !important;";
+    } else if (label.toUpperCase().includes("SEM 2")) {
+        rowStyle = "background-color: #e0e7ff !important; color: #4338ca !important; font-weight: 900 !important;";
+    } else {
+        rowStyle = "background-color: #f1f5f9 !important; color: #334155 !important; font-weight: bold !important;";
+    }
+    
+    rowStyle += " -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;";
+
+    return `<tr style="${rowStyle} border: 2px solid #000;">
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${label}</td>
+        ${SUBJECTS.map(sub => `<td style="color: inherit; border: 2px solid #000; font-weight: 900;">${(recs.reduce((u,r)=>u+(r.marks[sub]||0),0)/recs.length).toFixed(2)}</td>`).join('')}
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${totalSum.toFixed(2)}</td>
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${avg.toFixed(2)}</td>
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${getRank(avg, groupAvgs)}</td>
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">_ _</td>
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">_ _</td>
+        <td class="btn-modal-hide" style="border: 2px solid #000;">
+            ${isAnn ? `<button onclick="showCard('${no}','${g}','${s}')" style="cursor:pointer; font-weight:900;">CARD</button>` : '-'}
+        </td>
     </tr>`;
 }
 
@@ -931,7 +943,6 @@ function buildCardHTML(no, g, s, classData) {
             const sRecs = recs.filter(r => targetTerms.includes(Number(r.term)));
             
             if (sRecs.length > 0 || isAvgCol) {
-                // በየተርሙ ያለውን አማካይ ለማግኘት
                 const currentAvg = sRecs.length > 0 ? (sRecs.reduce((sum, r) => sum + (Number(r.avg) || 0), 0) / sRecs.length) : 0;
                 
                 if (m.key === 'TOTAL' && sRecs.length > 0) {
