@@ -21,7 +21,7 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 /* ==========================================================================
    * ሮስተር እና ካርድ ላይ ያሉትን ሁሉንም ጽሑፎች ደማቅ (Bold) ማድረጊያ *
    ========================================================================== */
-#mainTable, #mainTable *, 
+body, input, select, table, td, th, 
 .card-content, .card-content *, 
 #rosterHeader, #rosterHeader *,
 #rosterFooterContainer, #rosterFooterContainer * {
@@ -64,6 +64,8 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         color: #000 !important; 
         margin: 0 !important;
         padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     #app { display: block !important; }
@@ -96,8 +98,8 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         color: #ffffff !important; 
         font-weight: 900 !important; 
         border: 2px solid #ffffff !important; 
-        -webkit-print-color-adjust: exact; 
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;
         padding: 6px 4px !important;
     }
 
@@ -130,8 +132,8 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
         background-color: #000000 !important;
         color: #ffffff !important;
         border: 2px solid #ffffff !important; 
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
     .roster-stats-container table, .roster-stats-container td {
         border: 2px solid #000 !important;
@@ -170,12 +172,14 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 
     body.printing-cards .card-content { 
         width: 100% !important; 
-        height: 128mm !important; 
+        height: auto !important; 
+        min-height: 135mm !important; 
         margin: 0 auto 4mm auto !important; 
         padding: 3mm !important; 
         page-break-inside: avoid !important; 
         break-inside: avoid !important;
-        display: block !important;
+        display: flex !important;
+        flex-direction: column !important;
         box-sizing: border-box !important;
         color: #000 !important;
     }
@@ -197,8 +201,9 @@ body{margin:0;background:var(--bg);height:100vh;display:flex;flex-direction:colu
 
 .app-header { background: #111827; color: white; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--w); }
 #login{position:fixed;inset:0;background:linear-gradient(45deg, #1e3a8a 0%, #3b82f6 100%);display:flex;align-items:center;justify-content:center;z-index:10000}
-.login-box{background:rgba(255,255,255,0.15);padding:40px;border-radius:20px;border:2px solid rgba(255,255,255,0.5);backdrop-filter:blur(15px);text-align:center;color:#fff;width:320px}
-#login input{padding:12px;border-radius:8px;border:none;margin:15px 0;width:100%;text-align:center;font-size:18px;background:#fff;color:#1e3a8a;font-weight:700}
+.login-box{background:rgba(255,255,255,0.15);padding:30px;border-radius:20px;border:2px solid rgba(255,255,255,0.5);backdrop-filter:blur(15px);text-align:center;color:#fff;width:360px; max-height: 95vh; overflow-y: auto;}
+#login input{padding:10px;border-radius:8px;border:none;margin:8px 0;width:100%;text-align:center;font-size:16px;background:#fff;color:#1e3a8a;font-weight:700}
+#login select{padding:8px; border-radius:5px; color:black; width:100%; margin:5px 0; font-weight:700;}
 .login-btn{padding:10px 0;width:100%;border-radius:30px;border:none;background:#fff;color:#1e3a8a;font-weight:700;cursor:pointer}
 
 #app{display:none;flex-direction:column;height:100%}
@@ -247,35 +252,40 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
     <div class="login-box">
         <h2>DIA ROSTER APP (ሮስተር)</h2>
         <input type="tel" id="phoneInput" placeholder="የስልክ ቁጥር (Phone Number)">
+        <input type="password" id="passInput" placeholder="የግል ማለፊያ ቃል (Personal Password)">
         
-        <input type="password" id="passInput" placeholder="የክፍሉ ሚስጥራዊ ቁልፍ (Class Password)">
-        
-        <div style="margin-top: 10px; text-align: left; color: white; font-size: 14px;">
-            <label>የሚያስተምሩት ክፍል (Grade)፦</label>
-            <select id="signUpGrade" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; color: black;">
-                <option value="Grade_1">Grade 1</option>
-                <option value="Grade_2">Grade 2</option>
-                <option value="Grade_3">Grade 3</option>
-                <option value="Grade_4">Grade 4</option>
-                <option value="Grade_5">Grade 5</option>
-                <option value="Grade_6">Grade 6</option>
-                <option value="Grade_7">Grade 7</option>
-                <option value="Grade_8">Grade 8</option>
-                <option value="Grade_9">Grade 9</option>
-                <option value="Grade_10">Grade 10</option>
-                <option value="Grade_11">Grade 11</option>
-                <option value="Grade_12">Grade 12</option>
-            </select>
-        </div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.3); margin-top: 15px; padding-top: 10px;">
+            <p style="margin: 0 0 10px 0; color: #f59e0b; font-size: 13px;">አዲስ ለመመዝገብ ብቻ የሚሞላ (For Signup Only)፦</p>
+            
+            <input type="password" id="classCodeInput" placeholder="የክፍሉ መለያ ኮድ (Class Code)">
+            
+            <div style="text-align: left; color: white; font-size: 13px;">
+                <label>የሚያስተምሩት ክፍል (Grade)፦</label>
+                <select id="signUpGrade">
+                    <option value="Grade_1">Grade 1</option>
+                    <option value="Grade_2">Grade 2</option>
+                    <option value="Grade_3">Grade 3</option>
+                    <option value="Grade_4">Grade 4</option>
+                    <option value="Grade_5">Grade 5</option>
+                    <option value="Grade_6">Grade 6</option>
+                    <option value="Grade_7">Grade 7</option>
+                    <option value="Grade_8">Grade 8</option>
+                    <option value="Grade_9">Grade 9</option>
+                    <option value="Grade_10">Grade 10</option>
+                    <option value="Grade_11">Grade 11</option>
+                    <option value="Grade_12">Grade 12</option>
+                </select>
+            </div>
 
-        <div style="margin-top: 10px; text-align: left; color: white; font-size: 14px;">
-            <label>ሴክሽን (Section)፦</label>
-            <select id="signUpSection" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; color: black;">
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-            </select>
+            <div style="text-align: left; color: white; font-size: 13px; margin-top: 8px;">
+                <label>ሴክሽን (Section)፦</label>
+                <select id="signUpSection">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+            </div>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 15px;">
@@ -299,11 +309,11 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
     
     <div class="top" id="inputForm">
         <div class="row">
-            <div class="fld"><label>School Name / ትምህርት ቤት</label><input type="text" id="h_s" value="DILIGENT INTELLECTUALS ACADEMY" style="width:250px"></div>
-            <div class="fld"><label>Mode / ዓይነት</label><select id="h_m" onchange="handleModeChange()"><option value="semester">Semester / ሴሚስተር</option><option value="quarter" selected>Quarter / ኳርተር</option></select></div>
-            <div class="fld"><label>Year / ዓመተ ምሕረት</label><input type="text" id="h_y" value="2018 E.C" style="width:120px"></div>
-            <div class="fld"><label>Subjects / ትምህርቶች (በኮማ ይለዩ)</label><input type="text" id="h_b" value="Math, English, Amharic, Science, IT" style="width:230px" oninput="saveSubs()"></div>
-            <button class="btn" style="background:var(--d)" onclick="location.reload()">LOCK 🔒 መቆለፊያ</button>
+            <div class="fld"><label>School Name / ትምህርት ቤት</label><input type="text" id="h_s" value="DILIGENT INTELLECTUALS ACADEMY" style="width:250px" onblur="syncSettingsWithCloud()" onchange="syncSettingsWithCloud()"></div>
+            <div class="fld"><label>Mode / ዓይነት</label><select id="h_m" onchange="handleModeChange(); syncSettingsWithCloud()"><option value="semester">Semester / ሴሚስተር</option><option value="quarter" selected>Quarter / ኳርተር</option></select></div>
+            <div class="fld"><label>Year / ዓመተ ምሕረት</label><input type="text" id="h_y" value="2018 E.C" style="width:120px" onblur="syncSettingsWithCloud()" onchange="syncSettingsWithCloud()"></div>
+            <div class="fld"><label>Subjects / ትምህርቶች (በኮማ ይለዩ)</label><input type="text" id="h_b" value="Math, English, Amharic, Science, IT" style="width:230px" oninput="saveSubs()" onblur="syncSettingsWithCloud()"></div>
+            <button class="btn" style="background:var(--d)" onclick="handleLogout()">LOGOUT 🔒 መውጫ</button>
         </div>
         <div class="row" style="border-top:1px solid #eee;padding-top:10px">
             <input type="hidden" id="e_id" value="-1">
@@ -357,7 +367,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyCIQLl6EGGscg35mSpFvhhGYSU84IANNxQ",
@@ -375,53 +385,77 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
 
     window.firebaseAuth = auth;
 
-    // 🔄 1) LOGIN FUNCTION
+    // 🔒 የአካባቢ ማከማቻ ቁልፎችን በመለያ መለየት (Local Data Isolation)
+    window.getDbKey = function() {
+        return auth.currentUser ? `_DIA_DATA_${auth.currentUser.uid}` : '_DIA_DATA_V10_DUAL';
+    };
+    window.getSubKey = function() {
+        return auth.currentUser ? `_DIA_SUBS_${auth.currentUser.uid}` : '_DIA_SUBS_PERMANENT';
+    };
+
+    // 🔄 የባለቤትነት ሉዓላዊነትን የማረጋገጥ እና ራስ-ሰር መግቢያ መቆጣጠሪያ
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            try {
+                const snapshot = await get(ref(db, `users_profile/${user.uid}`));
+                if (snapshot.exists()) {
+                    const profile = snapshot.val();
+                    
+                    document.getElementById('view_g').value = profile.assignedGrade;
+                    document.getElementById('view_g').disabled = true; 
+                    document.getElementById('view_s').value = profile.assignedSection;
+                    document.getElementById('view_s').disabled = true; 
+
+                    window.currentGrade = profile.assignedGrade;
+                    window.currentSection = profile.assignedSection;
+
+                    if (profile.settings) {
+                        document.getElementById('h_s').value = profile.settings.schoolName || "DILIGENT INTELLECTUALS ACADEMY";
+                        document.getElementById('h_y').value = profile.settings.academicYear || "2018 E.C";
+                        document.getElementById('h_b').value = profile.settings.subjects || "Math, English, Amharic, Science, IT";
+                        document.getElementById('h_m').value = profile.settings.mode || "quarter";
+                    }
+                }
+                
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('app').style.display = 'flex';
+                
+                loadDataFromStorage();
+                initApp(); 
+                window.listenToCurrentClassCloud(); 
+            } catch (error) {
+                console.error("Session sync failed: ", error);
+            }
+        } else {
+            document.getElementById('login').style.display = 'flex';
+            document.getElementById('app').style.display = 'none';
+        }
+    });
+
+    // 🔄 1) LOGIN FUNCTION (በመምህሩ የግል ፓስወርድ ብቻ መግቢያ) [1]
     window.checkLogin = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
         const password = document.getElementById('passInput')?.value; 
 
         if(!phone || !password) {
-            alert("እባክዎ ስልክ ቁጥር እና የክፍል ቁልፍ በትክክል ይሙሉ!");
+            alert("እባክዎ ስልክ ቁጥር እና የግል ማለፊያ ቃል በትክክል ይሙሉ!");
             return;
         }
 
         const fakeEmail = `${phone}@school.com`;
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
-            const user = userCredential.user;
-
-            const snapshot = await get(ref(db, `users_profile/${user.uid}`));
-            
-            if (snapshot.exists()) {
-                const profile = snapshot.val();
-                
-                document.getElementById('view_g').value = profile.assignedGrade;
-                document.getElementById('view_g').disabled = true; 
-                document.getElementById('view_s').value = profile.assignedSection;
-                document.getElementById('view_s').disabled = true; 
-
-                window.currentGrade = profile.assignedGrade;
-                window.currentSection = profile.assignedSection;
-            } else {
-                alert("የክፍል መረጃዎ በዳታቤዝ ላይ አልተገኘም!");
-                return;
-            }
-
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-            
-            if (typeof initApp === "function") initApp(); 
-            if (typeof window.listenToCurrentClassCloud === "function") window.listenToCurrentClassCloud(); 
+            await signInWithEmailAndPassword(auth, fakeEmail, password);
         } catch (error) {
-            alert("የመግቢያ ስህተት፦ የስልክ ቁጥሩ ወይም የክፍል ቁልፉ አልተገኘም!");
+            alert("የመግቢያ ስህተት፦ የስልክ ቁጥሩ ወይም የግል ማለፊያ ቃሉ አልተገኘም!");
         }
     };
 
-    // 🟢 2) SIGN UP FUNCTION
+    // 🟢 2) SIGN UP FUNCTION (መምህሩ የራሱን የግል ፓስወርድ መርጦ የሚመዘገብበት) [1]
     window.handleSignUp = async function() {
         const phone = document.getElementById('phoneInput')?.value.trim();
-        const classPassword = document.getElementById('passInput')?.value.trim().toLowerCase(); 
+        const personalPassword = document.getElementById('passInput')?.value.trim();
+        const classPassword = document.getElementById('classCodeInput')?.value.trim().toLowerCase(); 
         const selectedGrade = document.getElementById('signUpGrade')?.value;
         const selectedSection = document.getElementById('signUpSection')?.value; 
 
@@ -431,49 +465,81 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             "Grade_9": "dia9999", "Grade_10": "dia1010", "Grade_11": "dia1111", "Grade_12": "dia1212"
         };
 
-        if(!phone || !classPassword) {
-            alert("እባክዎ ስልክ ቁጥር እና የክፍል ቁልፍ በትክክል ይሙሉ!");
+        if(!phone || !personalPassword || !classPassword) {
+            alert("እባክዎ ስልክ ቁጥር፣ የግል ማለፊያ ቃል እና የክፍል መለያ በትክክል ይሙሉ!");
+            return;
+        }
+
+        if (personalPassword.length < 6) {
+            alert("የግል ማለፊያ ቃል ቢያንስ 6 ፊደላት/ቁጥሮች መሆን አለበት!");
             return;
         }
 
         if (classPassword !== classKeys[selectedGrade]) {
-            alert("የክፍሉ ሚስጥራዊ ቁልፍ (Class Password) ስህተት ነው!");
+            alert("ያስገቡት የክፍል መለያ ኮድ (Class Code) ስህተት ነው!");
             return;
         }
 
         const fakeEmail = `${phone}@school.com`;
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, classPassword);
+            const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, personalPassword);
             const user = userCredential.user;
 
             await set(ref(db, `users_profile/${user.uid}`), {
                 assignedGrade: selectedGrade,
-                assignedSection: selectedSection
+                assignedSection: selectedSection,
+                settings: {
+                    schoolName: "DILIGENT INTELLECTUALS ACADEMY",
+                    academicYear: "2018 E.C",
+                    subjects: "Math, English, Amharic, Science, IT",
+                    mode: "quarter"
+                }
             });
 
-            alert("አካውንትዎ ለ " + selectedGrade + " በተሳካ ሁኔታ ተፈጥሯል!");
-            
-            document.getElementById('view_g').value = selectedGrade;
-            document.getElementById('view_g').disabled = true; 
-            document.getElementById('view_s').value = selectedSection;
-            document.getElementById('view_s').disabled = true; 
-
-            window.currentGrade = selectedGrade;
-            window.currentSection = selectedSection;
-
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('app').style.display = 'flex';
-            
-            if (typeof initApp === "function") initApp(); 
-            if (typeof window.listenToCurrentClassCloud === "function") window.listenToCurrentClassCloud(); 
+            alert("አካውንትዎ ለ " + selectedGrade + " በራስዎ የግል ማለፊያ ቃል በተሳካ ሁኔታ ተፈጥሯል!");
         } catch (error) {
             alert("የምዝገባ ስህተት፦ " + error.message);
         }
     };
 
-    // 🔄 3) HIGHLY RELIABLE OFFLINE-FIRST CLOUD SYNC
-    // በዌብሶኬት ፈንታ በአንድ የ Get ትዕዛዝ ብቻ መረጃ በመሳብ ኔትወርክ ላይ መዘግየትን ሙሉ በሙሉ ያስወግዳል
+    // 🚪 3) LOGOUT FUNCTION
+    window.handleLogout = async function() {
+        if (confirm("ከሲስተሙ መውጣት ይፈልጋሉ?")) {
+            try {
+                await signOut(auth);
+                DATA = [];
+                localStorage.removeItem('_DIA_STATE');
+                location.reload();
+            } catch (err) {
+                alert("መውጣት አልተቻለም: " + err.message);
+            }
+        }
+    };
+
+    // ⚙️ 4) SYNC SETTINGS
+    window.syncSettingsWithCloud = async function() {
+        const currentUser = auth.currentUser;
+        if (!currentUser) return;
+
+        const schoolName = document.getElementById('h_s').value.trim();
+        const academicYear = document.getElementById('h_y').value.trim();
+        const subjects = document.getElementById('h_b').value.trim();
+        const mode = document.getElementById('h_m').value;
+
+        try {
+            await set(ref(db, `users_profile/${currentUser.uid}/settings`), {
+                schoolName,
+                academicYear,
+                subjects,
+                mode
+            });
+        } catch (err) {
+            console.error("Failed to sync settings: ", err);
+        }
+    };
+
+    // 🔄 5) SMART MERGE CONFLICT RESOLUTION
     window.listenToCurrentClassCloud = async function() {
         const status = document.getElementById('cloudStatus');
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
@@ -492,12 +558,14 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         try {
             const snapshot = await get(classRef);
             if (snapshot.exists()) {
-                DATA = snapshot.val() || [];
-                localStorage.setItem('_DIA_DATA_V10_DUAL', JSON.stringify(DATA));
+                const cloudData = snapshot.val() || [];
+                DATA = mergeRosters(DATA, cloudData);
+                
+                localStorage.setItem(window.getDbKey(), JSON.stringify(DATA));
                 if (typeof renderTable === "function") renderTable();
 
                 if (status) {
-                    status.innerText = "Cloud: Connected (Live)";
+                    status.innerText = "Cloud: Connected (Synced)";
                     status.className = "sync-badge sync-on";
                 }
             } else {
@@ -513,8 +581,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
                 }
             }
         } catch (err) {
-            console.error("Cloud Access Error (Offline Mode Fallback active): ", err);
-            // የኢንተርኔት ግንኙነት ባይኖርም ከስልክ ማከማቻ የተነበበውን ዳታ ያሳያል
+            console.error("Cloud Access Error: ", err);
             if (typeof renderTable === "function") renderTable();
             if (status) {
                 status.innerText = "Cloud: Offline (Local Mode)";
@@ -523,50 +590,48 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         }
     };
 
-    // 🚀 መተግበሪያው ሲነሳ
-    document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(() => {
-            if (typeof window.saveData === "function") {
-                const originalSaveData = window.saveData;
-                window.saveData = function(...args) {
-                    originalSaveData.apply(this, args);
-                    window.syncWithCloud();
-                };
+    function mergeRosters(local, remote) {
+        const mergedMap = new Map();
+        local.forEach(item => mergedMap.set(item.id, item));
+        remote.forEach(item => {
+            const existing = mergedMap.get(item.id);
+            if (!existing || (item.updatedAt && (!existing.updatedAt || item.updatedAt > existing.updatedAt))) {
+                mergedMap.set(item.id, item);
             }
-        }, 800);
+        });
+        return Array.from(mergedMap.values());
+    }
 
-        const gradeSelect = document.getElementById('view_g');
-        const secSelect = document.getElementById('view_s');
-        if (gradeSelect) gradeSelect.addEventListener('change', window.listenToCurrentClassCloud);
-        if (secSelect) secSelect.addEventListener('change', window.listenToCurrentClassCloud);
-    });
-
-    // ⬆️ ወደ ክላውድ መጫኛ (በጀርባ ያለ መዘግየት ይሰራል)
-    window.syncWithCloud = async function() {
+    let syncTimeout;
+    window.syncWithCloud = function() {
         const status = document.getElementById('cloudStatus');
-        const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
-        const vs = document.getElementById('view_s').value.trim();
-        const currentUser = auth.currentUser;
+        if (status) status.innerText = "Queueing Sync...";
         
-        if (!currentUser) return;
-        if (status) status.innerText = "Saving Online...";
-        
-        try {
-            await set(ref(db, `rosters/${currentUser.uid}/${vg}/${vs}`), DATA);
-            if(status) {
-                status.innerText = "Cloud: Saved & Synchronized";
-                status.className = "sync-badge sync-on";
+        clearTimeout(syncTimeout);
+        syncTimeout = setTimeout(async () => {
+            const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
+            const vs = document.getElementById('view_s').value.trim();
+            const currentUser = auth.currentUser;
+            
+            if (!currentUser) return;
+            if (status) status.innerText = "Saving Online...";
+            
+            try {
+                await set(ref(db, `rosters/${currentUser.uid}/${vg}/${vs}`), DATA);
+                if(status) {
+                    status.innerText = "Cloud: Synced";
+                    status.className = "sync-badge sync-on";
+                }
+            } catch (err) {
+                console.error("Auto Sync Error: " + err.message);
+                if(status) {
+                    status.innerText = "Cloud: Offline (Saved Locally)";
+                    status.className = "sync-badge sync-off";
+                }
             }
-        } catch (err) {
-            console.error("Auto Sync Error: " + err.message);
-            if(status) {
-                status.innerText = "Cloud: Offline (Saved Locally)";
-                status.className = "sync-badge sync-off";
-            }
-        }
+        }, 1500); 
     };
 
-    // ⬇️ ከክላውድ ማውረጃ
     window.pullFromCloud = async function() {
         const vg = document.getElementById('view_g').value.trim().replace(/\s+/g, '_');
         const vs = document.getElementById('view_s').value.trim();
@@ -580,7 +645,7 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
             if (snapshot.exists()) {
                 if(confirm("ክላውድ ላይ ያለውን ዳታ አውርጄ አሁን ያለውን ልተካው?")) {
                     DATA = snapshot.val() || [];
-                    localStorage.setItem('_DIA_DATA_V10_DUAL', JSON.stringify(DATA));
+                    localStorage.setItem(window.getDbKey(), JSON.stringify(DATA));
                     if (typeof renderTable === "function") renderTable();
                     alert("ዳታው ከክላውድ ወርዷል!");
                 }
@@ -592,16 +657,30 @@ th { background: #1e293b; color: #fff; position: sticky; top: 0; z-index: 10; }
         }
     };
 </script>
+
 <script>
 const DB_KEY = '_DIA_DATA_V10_DUAL';
 const SUB_KEY = '_DIA_SUBS_PERMANENT';
 const STATE_KEY = '_DIA_STATE';
 
-let DATA = JSON.parse(localStorage.getItem(DB_KEY)) || [];
+let DATA = []; 
 let SUBJECTS = [];
 
+window.toggleForm = function() {
+    const form = document.getElementById('inputForm');
+    if (form) {
+        form.classList.toggle('collapsed');
+    }
+};
+
+function loadDataFromStorage() {
+    const key = (typeof window.getDbKey === "function") ? window.getDbKey() : DB_KEY;
+    DATA = JSON.parse(localStorage.getItem(key)) || [];
+}
+
 function initApp() {
-    const savedSubs = localStorage.getItem(SUB_KEY);
+    const subKey = (typeof window.getSubKey === "function") ? window.getSubKey() : SUB_KEY;
+    const savedSubs = localStorage.getItem(subKey);
     if(savedSubs) document.getElementById('h_b').value = savedSubs;
 
     const currentGrade = window.currentGrade || document.getElementById('view_g')?.value || "Grade_1";
@@ -625,25 +704,38 @@ function initApp() {
     updateNextID(); 
 
     if (typeof renderTable === "function") {
-        renderTable(currentGrade, currentSection);
+        renderTable();
     }
 }
 
+// 🎯 አዲሱ ሙሉ በሙሉ የተስተካከለ የ auto-comment ስሌት (Dynamic Evaluation with no missing gaps)
 function getAutoComment(avg) {
-    if (avg >= 90) return "Excellent";
-    if (avg >= 80) return "Very Good";
-    if (avg >= 70) return "Good";
-    if (avg >= 60) return "Satisfactory";
-    if (avg >= 50) return "Fair";
-    return "Poor";
+    if (avg === undefined || avg === null || isNaN(avg) || avg === "-") return "-";
+    const score = Number(avg);
+    if (score >= 90) return "Excellent";
+    if (score >= 80) return "V. Good";
+    if (score >= 70) return "Good";
+    if (score >= 60) return "Satisfactory"; // 60-70 ያለውን ክፍተት ለመሙላት
+    if (score >= 50) return "Fair";         // 50-60
+    return "Poor";                          // ከ 50 በታች
 }
 
 function handleModeChange() { initApp(); }
-function toggleForm() { document.getElementById('inputForm').classList.toggle('collapsed'); }
 function autoJump(idx) { if (document.getElementById(`m_${idx}`).value.length >= 2) { const next = document.getElementById(`m_${idx + 1}`); if (next) next.focus(); else document.getElementById('saveBtn').focus(); } }
 function handleEnter(e, idx) { if (e.key === 'Enter') { e.preventDefault(); const next = document.getElementById(`m_${idx + 1}`); if (next) next.focus(); else saveData(); } }
-function saveSubs() { localStorage.setItem(SUB_KEY, document.getElementById('h_b').value); SUBJECTS = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x); initApp(); }
-function updateViewState() { localStorage.setItem(STATE_KEY, JSON.stringify({g: document.getElementById('view_g').value, s: document.getElementById('view_s').value})); updateNextID(); renderTable(); }
+
+function saveSubs() { 
+    const subKey = (typeof window.getSubKey === "function") ? window.getSubKey() : SUB_KEY;
+    localStorage.setItem(subKey, document.getElementById('h_b').value); 
+    SUBJECTS = document.getElementById('h_b').value.split(',').map(x => x.trim()).filter(x => x); 
+    initApp(); 
+}
+
+function updateViewState() { 
+    localStorage.setItem(STATE_KEY, JSON.stringify({g: document.getElementById('view_g').value, s: document.getElementById('view_s').value})); 
+    updateNextID(); 
+    renderTable(); 
+}
 
 function handlePrintRoster() { document.body.classList.remove('printing-cards'); document.body.classList.add('printing-roster'); window.print(); }
 
@@ -856,8 +948,8 @@ function renderSubRow(no, g, s, terms, label, cData, isAnn=false) {
         <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${totalSum.toFixed(2)}</td>
         <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${avg.toFixed(2)}</td>
         <td style="color: inherit; border: 2px solid #000; font-weight: 900;">${getRank(avg, groupAvgs)}</td>
-        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">_ _</td>
-        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">_ _</td>
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">-</td>
+        <td style="color: inherit; border: 2px solid #000; font-weight: 900;">-</td>
         <td class="btn-modal-hide" style="border: 2px solid #000;">
             ${isAnn ? `<button onclick="showCard('${no}','${g}','${s}')" style="cursor:pointer; font-weight:900;">CARD</button>` : '-'}
         </td>
@@ -882,7 +974,8 @@ function buildCardHTML(no, g, s, classData) {
     const mode = document.getElementById('h_m').value;
     const allIds = [...new Set(classData.map(d => d.no))];
     const totalStudents = allIds.length;
-    let dynamicSubjects = Object.keys(recs[0].marks || {});
+
+    let dynamicSubjects = SUBJECTS; 
 
     let tableHtml = `<table class="card-table" style="width:100%; border-collapse:collapse; border: 2.5px solid #000; font-weight: 900 !important; color: #000; font-size: 10px;">
         <thead style="background-color: #eee !important; -webkit-print-color-adjust: exact;">
@@ -961,17 +1054,17 @@ function buildCardHTML(no, g, s, classData) {
                     if(String(rankNum).includes('/')) rankNum = rankNum.split('/')[0];
                     val = rankNum + "/" + totalStudents;
                 }
-                else if (m.key === 'COMM' && sRecs.length > 0) {
-                    val = typeof getAutoComment === 'function' ? getAutoComment(currentAvg) : "-";
+                else if (m.key === 'COMM') {
+                    // 👉 ራስ-ሰር አስተያየትን በእያንዳንዱ አምድ አማካይ ውጤት መሠረት በቅጽበት ማስላት (Dynamically evaluate from column average)
+                    val = getAutoComment(currentAvg);
                 }
                 else if (m.key === 'COND' || m.key === 'ABS') {
                     val = isAvgCol ? "" : (m.key === 'COND' ? (sRecs[sRecs.length-1].conduct || "-") : sRecs.reduce((sum, r) => sum + (Number(r.absent) || 0), 0));
                 }
             }
-            tableHtml += `<td style="font-size:9px; border: 1.5px solid #000;">${val}</td>`;
+            tableHtml += `<td style="font-size:8px; border: 1.5px solid #000; max-width:90px; white-space: normal; word-break: break-word; padding: 2px;">${val}</td>`;
         });
 
-        // የአመታዊ (Annual) ስሌቶች
         const annAvg = recs.length > 0 ? (recs.reduce((sum, r) => sum + (Number(r.avg) || 0), 0) / recs.length) : 0;
         let annVal = "-";
         if (recs.length > 0) {
@@ -998,16 +1091,17 @@ function buildCardHTML(no, g, s, classData) {
                 annVal = recs[recs.length-1].conduct || "-";
             }
             else if (m.key === 'COMM') {
-                annVal = typeof getAutoComment === 'function' ? getAutoComment(annAvg) : "-";
+                // 👉 አመታዊ አስተያየትን ከአመታዊ ጠቅላላ አማካዩ ውጤት መሠረት በቅጽበት ማስላት (Dynamically evaluate from annual average)
+                annVal = getAutoComment(annAvg);
             }
         }
-        tableHtml += `<td style="background:#fefce8 !important; border: 2.5px solid #000; text-align:center; font-size: 8px;">${annVal}</td></tr>`;
+        tableHtml += `<td style="background:#fefce8 !important; border: 2.5px solid #000; text-align:center; font-size: 8px; max-width:90px; white-space: normal; word-break: break-word;">${annVal}</td></tr>`;
     });
 
     tableHtml += `</tbody></table>`;
 
-    return `<div class="card-content" style="height: 138mm !important; box-sizing: border-box; padding: 3mm; page-break-inside: avoid;">
-        <div style="border: 3.5px solid #1e3a8a; height: 100%; display: flex; flex-direction: column; background: #fff; font-weight: 900 !important;">
+    return `<div class="card-content" style="height: auto !important; min-height: 135mm; box-sizing: border-box; padding: 3mm; page-break-inside: avoid; display: flex; flex-direction: column;">
+        <div style="border: 3.5px solid #1e3a8a; height: 100%; display: flex; flex-direction: column; background: #fff; font-weight: 900 !important; flex-grow: 1;">
             <div style="background-color: #eff6ff !important; padding: 6px; text-align: center; border-bottom: 2.5px solid #1e3a8a; -webkit-print-color-adjust: exact;">
                 <h2 style="margin: 0; color: #1e3a8a; font-size: 1.3em; font-weight: 900;">${school}</h2>
                 <div style="font-weight: 900; color: #1e3a8a; font-size: 11px;">STUDENT PROGRESS REPORT CARD (${year})</div>
@@ -1019,9 +1113,10 @@ function buildCardHTML(no, g, s, classData) {
                 <div>Sex: <span style="text-decoration: underline;">${recs[0].sex}</span></div>
             </div>
             <div style="padding: 4px; flex-grow: 1;">${tableHtml}</div>
-            <div style="padding: 8px; display: flex; justify-content: space-between; font-weight: 900; font-size: 10px; margin-top: auto; color: #000;">
-                <div style="text-align: center; width: 45%; border-top: 2px solid #000; padding-top: 2px;">Teacher's Signature</div>
-                <div style="text-align: center; width: 45%; border-top: 2px solid #000; padding-top: 2px;">Director's Signature</div>
+            
+            <div style="padding: 15px 8px 5px 8px; display: flex; justify-content: space-between; font-weight: 900; font-size: 11px; margin-top: auto; color: #000;">
+                <div style="text-align: center; width: 40%; border-top: 1.5px solid #000; padding-top: 5px;">Teacher's Signature / የመምህሩ ፊርማ</div>
+                <div style="text-align: center; width: 40%; border-top: 1.5px solid #000; padding-top: 5px;">Director's Signature / የዳይሬክተሩ ፊርማ</div>
             </div>
         </div>
     </div>`;
@@ -1030,15 +1125,36 @@ function buildCardHTML(no, g, s, classData) {
 function saveData() {
     const name = document.getElementById('e_m').value.trim();
     if(!name) return alert("Enter Name / ስም ያስገቡ!");
+    
+    const age = parseInt(document.getElementById('e_a').value);
+    if (isNaN(age) || age < 4 || age > 100) {
+        return alert("እባክዎ ትክክለኛ የተማሪ እድሜ ያስገቡ (ከ4 እስከ 100)!");
+    }
+
+    const absent = parseInt(document.getElementById('e_abs').value || 0);
+    if (isNaN(absent) || absent < 0) {
+        return alert("የቀረበት ቀን ከ0 በታች መሆን አይችልም!");
+    }
+
     const currentTerm = parseInt(document.getElementById('e_t').value);
     const mode = document.getElementById('h_m').value;
     let marks = {}, total = 0;
-    
+    let validationError = false;
+
     document.querySelectorAll('.mark-input').forEach(i => { 
-        let v = parseFloat(i.value) || 0; 
+        let v = parseFloat(i.value); 
+        if (isNaN(v)) {
+            v = 0; 
+        }
+        if (v < 0 || v > 100) {
+            alert(`የውጤት ወሰን ስህተት፦ ለትምህርት ዓይነት "${i.dataset.subj}" ያስገቡት ውጤት (${v}) ከ0 በታች ወይም ከ100 በላይ መሆን አይችልም!`);
+            validationError = true;
+        }
         marks[i.dataset.subj] = v; 
         total += v; 
     });
+
+    if (validationError) return;
 
     const finalTotal = parseFloat(total.toFixed(2));
     const avg = parseFloat((total / SUBJECTS.length).toFixed(2));
@@ -1046,17 +1162,29 @@ function saveData() {
     const isEdit = document.getElementById('e_id').value !== "-1";
     const entry = {
         id: isEdit ? parseFloat(document.getElementById('e_id').value) : Date.now(),
-        no: document.getElementById('e_n').value, name, sex: document.getElementById('e_x').value, age: document.getElementById('e_a').value,
-        grade: document.getElementById('view_g').value, sec: document.getElementById('view_s').value,
-        mode: mode, term: currentTerm, conduct: document.getElementById('e_c').value, absent: document.getElementById('e_abs').value || 0,
+        no: document.getElementById('e_n').value, 
+        name, 
+        sex: document.getElementById('e_x').value, 
+        age,
+        grade: document.getElementById('view_g').value, 
+        sec: document.getElementById('view_s').value,
+        mode: mode, 
+        term: currentTerm, 
+        conduct: document.getElementById('e_c').value, 
+        absent,
         comment: document.getElementById('e_com').value || getAutoComment(avg), 
-        marks, total: finalTotal, avg: avg
+        marks, 
+        total: finalTotal, 
+        avg: avg,
+        updatedAt: Date.now() 
     };
     
     const idx = DATA.findIndex(d => d.id === entry.id);
     if(idx > -1) DATA[idx] = entry; else DATA.push(entry);
     
-    localStorage.setItem(DB_KEY, JSON.stringify(DATA));
+    const key = (typeof window.getDbKey === "function") ? window.getDbKey() : DB_KEY;
+    localStorage.setItem(key, JSON.stringify(DATA));
+    
     if(typeof syncWithCloud === 'function') syncWithCloud();
 
     if(!isEdit) {
@@ -1078,7 +1206,8 @@ function saveData() {
 function delRec(id) { 
     if(confirm("Delete? / ላጥፋው?")) { 
         DATA = DATA.filter(d => d.id !== id); 
-        localStorage.setItem(DB_KEY, JSON.stringify(DATA)); 
+        const key = (typeof window.getDbKey === "function") ? window.getDbKey() : DB_KEY;
+        localStorage.setItem(key, JSON.stringify(DATA)); 
         if(typeof syncWithCloud === 'function') syncWithCloud(); 
         renderTable(); 
     } 
@@ -1133,7 +1262,8 @@ function importJSON(event) {
                 } else {
                     DATA = importedData;
                 }
-                localStorage.setItem(DB_KEY, JSON.stringify(DATA));
+                const key = (typeof window.getDbKey === "function") ? window.getDbKey() : DB_KEY;
+                localStorage.setItem(key, JSON.stringify(DATA));
                 renderTable();
                 alert("ዳታው በተሳካ ሁኔታ ተመልሷል!");
                 if(typeof syncWithCloud === 'function') syncWithCloud();
@@ -1153,13 +1283,15 @@ function addSubject() {
     if(newSub && newSub.trim()) {
         document.getElementById('h_b').value = currentSubs ? currentSubs + ", " + newSub.trim() : newSub.trim();
         saveSubs();
+        if(typeof window.syncSettingsWithCloud === 'function') window.syncSettingsWithCloud();
     }
 }
 
 function clearAllData() {
     if(confirm("ማስጠንቀቂያ! ሁሉንም የተማሪዎች ዳታ ሙሉ በሙሉ ማጥፋት ይፈልጋሉ? ይህ ድርጊት ወደኋላ አይመለስም!")) {
         DATA = [];
-        localStorage.setItem(DB_KEY, JSON.stringify(DATA));
+        const key = (typeof window.getDbKey === "function") ? window.getDbKey() : DB_KEY;
+        localStorage.setItem(key, JSON.stringify(DATA));
         if(typeof syncWithCloud === 'function') syncWithCloud();
         renderTable();
         updateNextID();
